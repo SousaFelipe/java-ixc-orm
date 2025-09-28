@@ -23,7 +23,7 @@ public enum IxcContext {
 
     /**
      * <p>
-     * Define um novo {@link Environment} no contexto, caso já não tenha sido previamente definido
+     * Define um novo {@link Environment} no contexto, caso já não tenha sido previamente definido.
      * </p>
      *
      * @param env Um objeto que herde da classe {@link Environment}
@@ -35,7 +35,7 @@ public enum IxcContext {
     }
 
     /**
-     * @return Um {@link Environment} que tenha sido previamente definido por <b>setEnv(Environment env)</b>
+     * @return Um {@link Environment} que tenha sido previamente definido por <b>setEnv(Environment env).</b>
      */
     public Environment getEnv() {
         return env;
