@@ -4,13 +4,8 @@ package br.dev.fscarmo.ixcorm.config;
 /**
  * <p>
  * A classe 'Environment' deverá ser herdada, para que você possa construir sua própria maneira de carregar as
- * variáveis de ambiente sa sua aplicação.
+ * variáveis de ambiente na sua aplicação.
  * </p>
- *
- * <p>
- * Em caso de dúvidas de como implementar o método exigido, basta consultar uma das classes no pacote
- * {@link br.dev.fscarmo.ixcorm.config.envs}.
- * <p/>
  *
  * @author Felipe S. Carmo
  * @version 1.0.0
@@ -25,7 +20,7 @@ public abstract class Environment {
      * Define o valor da variável de ambiente que armazena o token de acesso gerado pelo sistema IXC Provedor.
      *
      * <p>
-     * Se a variável de ambiente já estiver sido definida por <b>setToken(token)</b>, ela não será sobrescrita.
+     * Se a variável de ambiente já tiver sido definida por <b>setToken(token)</b>, ela não será sobrescrita.
      * </p>
      *
      * @param token O novo valor do token
@@ -44,7 +39,7 @@ public abstract class Environment {
      * </p>
      *
      * <p>
-     * Se a variável de ambiente já estiver sido definida por <b>setDomain(domínio)</b>, ela não será sobrescrita.
+     * Se a variável de ambiente já tiver sido definida por <b>setDomain(domínio)</b>, ela não será sobrescrita.
      * </p>
      *
      * @param domain O novo valor do domínio
