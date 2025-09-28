@@ -16,6 +16,40 @@ import java.util.Base64;
 import java.util.List;
 
 
+/**
+ * <p>
+ * A classe 'IxcRequest' manipula a query de busca, constrói o objeto HTTP que executa a requisição e expões métodos que
+ * retornam a resposta.
+ * </p>
+ *
+ * <p>
+ * Essa classe não pode ser instanciada, pois ela existe apenas com a finalizada de encapsular toda a lógica da
+ * requisição e resposta HTTP. A maneira correta de utilizá-la é através de herança, como no exemplo a seguir:
+ * </p>
+ *
+ * {@snippet lang=java:
+ *
+ * class Cliente extends IxcRequest {
+ *
+ *     private Cliente() {
+ *         super("cliente");
+ *     }
+ *
+ *     public static Cliente newBuilder() {
+ *         return new Cliente();
+ *     }
+ * }
+ *
+ * Cliente cliente = Cliente.newBuilder()
+ *         .where("razao").exactly("João")
+ *         .where("data_nascimento").greaterThan("1999-01-01")
+ *
+ * }
+ *
+ * @author Felipe S. Carmo
+ * @version 1.0.2
+ * @since 2025-09-27
+ */
 public abstract class IxcRequest extends ORM {
 
 

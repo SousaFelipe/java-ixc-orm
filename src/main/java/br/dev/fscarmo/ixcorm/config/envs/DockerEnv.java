@@ -21,7 +21,7 @@ import br.dev.fscarmo.ixcorm.exception.UnreadableDockerEnvException;
  * }
  *
  * @author Felipe S. Carmo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 2025-09-27
  */
 public class DockerEnv extends Environment {
@@ -32,13 +32,22 @@ public class DockerEnv extends Environment {
 
 
     public DockerEnv() {
-        String token = this.getEnvVarFromSystem(IXC_ACCESS_TOKEN);
-        String domain = this.getEnvVarFromSystem(IXC_SERVER_DOMAIN);
-        this.setToken(token);
-        this.setDomain(domain);
+        String token = getEnvVarFromSystem(IXC_ACCESS_TOKEN);
+        String domain = getEnvVarFromSystem(IXC_SERVER_DOMAIN);
+        setToken(token);
+        setDomain(domain);
     }
 
-
+    /**
+     * <p>
+     * Acessa as variáveis de ambiente Docker, ou do sistema, e busca por uma variável correspondente à chave forneceida
+     * pelo parâmetro <b>key.</b>
+     * </p>
+     *
+     * @param key A chave para acessar a variável de ambiente.
+     * @return O valor da variável de ambiente encontrada.
+     * @throws UnreadableDockerEnvException Se a variável de ambiente não é encontrada.
+     */
     private String getEnvVarFromSystem(String key) throws UnreadableDockerEnvException {
         String envVar = System.getenv(key);
         if (envVar == null) {

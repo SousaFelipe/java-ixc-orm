@@ -8,13 +8,15 @@ package br.dev.fscarmo.ixcorm.config;
  * </p>
  *
  * @author Felipe S. Carmo
- * @version 1.0.0
+ * @version 1.0.2
  * @since 2025-09-27
  */
 public abstract class Environment {
 
+
     private String token;
     private String domain;
+
 
     /**
      * Define o valor da variável de ambiente que armazena o token de acesso gerado pelo sistema IXC Provedor.
@@ -23,7 +25,7 @@ public abstract class Environment {
      * Se a variável de ambiente já tiver sido definida por <b>setToken(token)</b>, ela não será sobrescrita.
      * </p>
      *
-     * @param token O novo valor do token
+     * @param token O novo valor do token.
      */
     protected void setToken(String token) {
         boolean newTokenIsValid = (token != null && !token.isBlank());
@@ -42,7 +44,7 @@ public abstract class Environment {
      * Se a variável de ambiente já tiver sido definida por <b>setDomain(domínio)</b>, ela não será sobrescrita.
      * </p>
      *
-     * @param domain O novo valor do domínio
+     * @param domain O novo valor do domínio.
      */
     protected void setDomain(String domain) {
         boolean newDomainIsValid = (domain != null && !domain.isBlank());
@@ -53,14 +55,14 @@ public abstract class Environment {
     }
 
     /**
-     * @return O <b>Token</b> previamente definido por <b>setToken(String token)</b>
+     * @return O <b>Token</b> previamente definido por <b>setToken(String token).</b>
      */
     public String getToken() {
         return token;
     }
 
     /**
-     * @return O <b>Domínio</b> previamente definido por <b>setDomain(String domain)</b>
+     * @return O <b>Domínio</b> previamente definido por <b>setDomain(String domain).</b>
      */
     public String getDomain() {
         return domain;

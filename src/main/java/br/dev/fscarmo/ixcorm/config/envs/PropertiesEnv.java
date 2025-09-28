@@ -27,7 +27,7 @@ import java.util.Properties;
  * }
  *
  * @author Felipe S. Carmo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 2025-09-27
  */
 public class PropertiesEnv extends Environment {
@@ -38,19 +38,19 @@ public class PropertiesEnv extends Environment {
 
 
     public PropertiesEnv() {
-        String token = this.getEnvVarFromProperties(IXC_ACCESS_TOKEN).orElse(null);
-        String domain = this.getEnvVarFromProperties(IXC_SERVER_DOMAIN).orElse(null);
-        this.setToken(token);
-        this.setDomain(domain);
+        String token = getEnvVarFromProperties(IXC_ACCESS_TOKEN).orElse(null);
+        String domain = getEnvVarFromProperties(IXC_SERVER_DOMAIN).orElse(null);
+        setToken(token);
+        setDomain(domain);
     }
 
     /**
      * <p>
-     * Acessa o arquivo <b>application.properties</b> e procura a propriedade pela chave passada no parâmetro <b>key</b>
+     * Acessa o arquivo <b>application.properties</b> e procura a propriedade pela chave passada no parâmetro <b>key.</b>
      * </p>
      *
      * @param key A chave para acessar a variável de ambiente.
-     * @return Um {@link Optional} contendo uma {@link String}, caso a variável de ambiente seja encontrada
+     * @return Um {@link Optional} contendo uma {@link String}, caso a variável de ambiente seja encontrada.
      */
     private Optional<String> getEnvVarFromProperties(String key) {
 
@@ -68,13 +68,13 @@ public class PropertiesEnv extends Environment {
     /**
      * <p>
      * Recebe um {@link InputStream}, com o conteúdo do arquivo a ser lido e coloca seu conteúdo em um objeto
-     * {@link Properties}
+     * {@link Properties}.
      * </p>
      *
-     * @param stream O conteúdo do arquivo que será lido
-     * @return Um objeto {@link Properties} contendo as variáveis de ambiente
+     * @param stream O conteúdo do arquivo que será lido.
+     * @return Um objeto {@link Properties} contendo as variáveis de ambiente.
      * @throws RuntimeException Se o <b>stream</b> for nulo, se ele estiver num formato inelegível, ou se houver um erro
-     * genérico enquanto a leitura dele é executada
+     * genérico enquanto a leitura dele é executada.
      */
     private Properties getPropertiesFromStream(InputStream stream) throws RuntimeException {
         try {
