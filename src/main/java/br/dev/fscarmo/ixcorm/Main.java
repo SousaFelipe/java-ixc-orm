@@ -4,7 +4,10 @@ package br.dev.fscarmo.ixcorm;
 import br.dev.fscarmo.ixcorm.config.envs.PropertiesEnv;
 
 
-class Cliente extends IxcRequest {
+class Cliente extends IxcOrm {
+
+    private String razao;
+    private String cnpj_cpf;
 
     private Cliente() {
         super("cliente");
@@ -21,11 +24,11 @@ public class Main {
     static void main() {
         IxcContext.INSTANCE.setEnv(new PropertiesEnv());
 
-        Cliente cliente = (Cliente) Cliente.newCliente()
+        IxcResponse response = Cliente.newCliente()
                 .where("razao").like("FELIPE DE SOUSA DO")
-                .where("data_nascimento").greaterThanEquals("1996-10-11");
+                .where("data_nascimento").greaterThanEquals("1996-11-10")
+                .GET(Cliente.class);
 
-        IxcResponse response = cliente.GET();
-        response.print();
+        IO.println(response.getBody());
     }
 }
