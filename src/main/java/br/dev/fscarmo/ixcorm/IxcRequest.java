@@ -23,35 +23,35 @@ public abstract class IxcRequest extends ORM {
     private URI uri;
 
 
-    protected IxcRequest(String table) {
+    public IxcRequest(String table) {
         super(table);
         setupDefaultHeaders();
         setupUri();
     }
 
 
-    protected IxcResponse GET() {
+    public IxcResponse GET() {
         enableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("POST");
         return new IxcResponse(response);
     }
 
 
-    protected IxcResponse POST() {
+    public IxcResponse POST() {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("POST");
         return new IxcResponse(response);
     }
 
 
-    protected IxcResponse PUT() {
+    public IxcResponse PUT() {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("PUT");
         return new IxcResponse(response);
     }
 
 
-    protected IxcResponse DELETE() {
+    public IxcResponse DELETE() {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("DELETE");
         return new IxcResponse(response);
