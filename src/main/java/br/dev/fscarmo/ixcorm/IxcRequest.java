@@ -18,10 +18,8 @@ import java.util.List;
 
 public abstract class IxcRequest extends ORM {
 
-
     private final List<Header> headers = new ArrayList<>();
     private URI uri;
-
 
     public IxcRequest(String table) {
         super(table);
@@ -29,13 +27,11 @@ public abstract class IxcRequest extends ORM {
         setupUri();
     }
 
-
     public IxcResponse GET() {
         enableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("POST");
         return new IxcResponse(response);
     }
-
 
     public IxcResponse POST() {
         disableListingHeader();
@@ -43,20 +39,17 @@ public abstract class IxcRequest extends ORM {
         return new IxcResponse(response);
     }
 
-
     public IxcResponse PUT() {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("PUT");
         return new IxcResponse(response);
     }
 
-
     public IxcResponse DELETE() {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("DELETE");
         return new IxcResponse(response);
     }
-
 
     private HttpResponse<String> sendRequestAndGetResponse(String method) {
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -81,26 +74,22 @@ public abstract class IxcRequest extends ORM {
         }
     }
 
-
     private void includeHeadersOnRequestBuilder(HttpRequest.Builder builder) {
         for (Header header : headers) {
             builder.setHeader(header.name(), header.value());
         }
     }
 
-
     private void setupDefaultHeaders() {
-        headers.add(Header.of("Authorization", "Basic " + this.getEncodedTokenFromContext()));
+        headers.add(Header.of("Authorization", "Basic "+ this.getTokenFromContext()));
         headers.add(Header.of("Content-Type", "application/json"));
     }
-
 
     private void setupUri() {
         String domain = IxcContext.INSTANCE.getEnv().getDomain();
         String table = getTable();
-        uri = URI.create("https://"+ domain + "/webservice/v1/"+ table);
+        uri = URI.create("https://"+ domain +"/webservice/v1/"+ table);
     }
-
 
     private void enableListingHeader() {
         if (isListingHeaderDisabled()) {
@@ -109,11 +98,9 @@ public abstract class IxcRequest extends ORM {
         }
     }
 
-
     private void disableListingHeader() {
         headers.removeIf(header -> header.hasName("ixcsoft"));
     }
-
 
     private boolean isListingHeaderDisabled() {
         return headers.stream()
@@ -122,8 +109,7 @@ public abstract class IxcRequest extends ORM {
                 .isEmpty();
     }
 
-
-    private String getEncodedTokenFromContext() {
+    private String getTokenFromContext() {
         String tokenFromEnv = IxcContext.INSTANCE.getEnv().getToken();
         byte[] bytes = tokenFromEnv.getBytes(StandardCharsets.UTF_8);
         return Base64.getEncoder().encodeToString(bytes);
