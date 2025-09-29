@@ -30,19 +30,16 @@ import java.util.List;
  */
 public abstract class OrmClient {
 
-
     private String body;
     private final List<Header> headers = new ArrayList<>();
     private final String table;
     private URI uri;
-
 
     protected OrmClient(String table) {
         this.table = table;
         setupDefaultHeaders();
         setupUri();
     }
-
 
     public IxcResponse GET() throws NetworkConnectionException {
         enableListingHeader();
@@ -68,7 +65,6 @@ public abstract class OrmClient {
         return new IxcResponse(response);
     }
 
-
     protected void setBody(String body) {
         this.body = body;
     }
@@ -76,7 +72,6 @@ public abstract class OrmClient {
     protected String getTable() {
         return table;
     }
-
 
     /**
      * <p>
@@ -95,7 +90,7 @@ public abstract class OrmClient {
             // OBS: Definindo o (method) de forma dinâmica
             requestBuilder.method(method, HttpRequest.BodyPublishers.ofString(body));
 
-            // ATENÇÃO: (Side Effect) no "requestBuilder"
+            // TODO: (Side Effect) na variável "requestBuilder"
             includeHeadersOnRequestBuilder(requestBuilder);
 
             return client.send(

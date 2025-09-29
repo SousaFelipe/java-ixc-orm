@@ -28,11 +28,9 @@ import br.dev.fscarmo.ixcorm.enums.Operator;
  */
 public class Parameter {
 
-
     private final String table;
     private final String operator;
     private final String value;
-
 
     private Parameter(Builder builder) {
         this.table = builder.type;
