@@ -23,18 +23,16 @@ import br.dev.fscarmo.ixcorm.enums.Operator;
  * }
  *
  * @author Felipe S. Carmo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 2025-09-27
  */
 public class Parameter {
+
 
     private final String table;
     private final String operator;
     private final String value;
 
-    public static Builder newBuilder(String table) {
-        return new Builder(table);
-    }
 
     private Parameter(Builder builder) {
         this.table = builder.type;
@@ -42,6 +40,22 @@ public class Parameter {
         this.value = (builder.value == null) ? "" : String.valueOf(builder.value);
     }
 
+    /**
+     * <p>
+     * Cria uma nova instância de {@link Builder}
+     * </p>
+     *
+     * @param table O nome que representa a tabela do IXC, que o {@link Builder} usará para basear a construção da query
+     *             de busca.
+     * @return Uma nova instância de {@link Builder}
+     */
+    public static Builder newBuilder(String table) {
+        return new Builder(table);
+    }
+
+    /**
+     * @return Uma <b>String</b> no formado JSON representando um objeto do filtro <b>grid_param.</b>
+     */
     @Override
     public String toString() {
         return "{" +
@@ -74,9 +88,9 @@ public class Parameter {
 
         private Builder(String table) {
             this.table = Utils.Text.normalize(table);
-            this.operator = Operator.EQUALS;
-            this.type = this.table;
-            this.value = null;
+            operator = Operator.EQUALS;
+            type = this.table;
+            value = null;
         }
 
         /**
@@ -84,11 +98,11 @@ public class Parameter {
          * Define o campo <b>TB</b> do objeto de busca no filtro <b>grid_param</b> do IXC Provedor.
          * </p>
          *
-         * @param type Se definido como "id", <b>TB</b> será "tabela.id"
+         * @param type EXEMPLO: Se definido como "id", <b>TB</b> será "tabela.id".
          */
         public void type(String type) {
             String normalizedType = Utils.Text.normalize(type);
-            this.type = this.table +"."+ normalizedType;
+            this.type = table +"."+ normalizedType;
         }
 
         /**
@@ -96,7 +110,7 @@ public class Parameter {
          * Define o campo <b>OP</b> do objeto de busca no filtro <b>grid_param</b> do IXC Provedor.
          * </p>
          *
-         * @param operator Todos os operadores disponíveis estão em: {@link Operator}
+         * @param operator Todos os operadores disponíveis estão em: {@link Operator}.
          */
         public void operator(Operator operator) {
             this.operator = (operator != null) ? operator : Operator.EQUALS;
@@ -116,7 +130,7 @@ public class Parameter {
         }
 
         /**
-         * @return Uma nova instância de {@link Parameter}
+         * @return Uma nova instância de {@link Parameter}.
          */
         public Parameter build() {
             return new Parameter(this);
