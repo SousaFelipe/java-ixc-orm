@@ -26,10 +26,8 @@ import br.dev.fscarmo.ixcorm.exception.UnreadableDockerEnvException;
  */
 public class DockerEnv extends Environment {
 
-
     private static final String IXC_ACCESS_TOKEN = "IXC_ACCESS_TOKEN";
     private static final String IXC_SERVER_DOMAIN = "IXC_SERVER_DOMAIN";
-
 
     public DockerEnv() {
         String token = getEnvVarFromSystem(IXC_ACCESS_TOKEN);

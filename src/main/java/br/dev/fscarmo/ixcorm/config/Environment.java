@@ -13,10 +13,8 @@ package br.dev.fscarmo.ixcorm.config;
  */
 public abstract class Environment {
 
-
     private String token;
     private String domain;
-
 
     /**
      * Define o valor da variável de ambiente que armazena o token de acesso gerado pelo sistema IXC Provedor.

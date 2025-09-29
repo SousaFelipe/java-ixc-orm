@@ -32,10 +32,8 @@ import java.util.Properties;
  */
 public class PropertiesEnv extends Environment {
 
-
     public static final String IXC_ACCESS_TOKEN = "ixc.access.token";
     public static final String IXC_SERVER_DOMAIN = "ixc.server.domain";
-
 
     public PropertiesEnv() {
         String token = getEnvVarFromProperties(IXC_ACCESS_TOKEN).orElse(null);
@@ -55,7 +53,7 @@ public class PropertiesEnv extends Environment {
     private Optional<String> getEnvVarFromProperties(String key) {
 
         InputStream stream = getClass().getClassLoader().getResourceAsStream("application.properties");
-        Properties properties = this.getPropertiesFromStream(stream);
+        Properties properties = getPropertiesFromStream(stream);
         String envVarValue = properties.getProperty(key);
 
         if (envVarValue != null && !envVarValue.isBlank()) {

@@ -6,9 +6,7 @@ import com.google.gson.JsonElement;
 
 public abstract class IxcRecordMapper {
 
-
     private final JsonElement jsonElement;
-
 
     public IxcRecordMapper(JsonElement jsonElement) {
         this.jsonElement = jsonElement;

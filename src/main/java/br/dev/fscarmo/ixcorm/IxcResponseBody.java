@@ -12,13 +12,11 @@ import java.util.List;
 
 public class IxcResponseBody {
 
-
     private final JsonObject jsonObject;
     private String type;
     private String message;
     private int page;
     private int total;
-
 
     public IxcResponseBody(JsonObject jsonObject) {
         this.jsonObject = jsonObject;

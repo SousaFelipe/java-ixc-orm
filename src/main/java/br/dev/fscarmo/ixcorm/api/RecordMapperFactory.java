@@ -10,14 +10,11 @@ import java.lang.reflect.InvocationTargetException;
 @SuppressWarnings("ClassCanBeRecord")
 public class RecordMapperFactory<T extends IxcRecordMapper> {
 
-
     private final Class<T> mapperClass;
-
 
     public RecordMapperFactory(Class<T> mapperClass) {
         this.mapperClass = mapperClass;
     }
-
 
     public T newMapper(JsonElement data) {
         try {
