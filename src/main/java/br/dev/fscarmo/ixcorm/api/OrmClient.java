@@ -1,8 +1,10 @@
-package br.dev.fscarmo.ixcorm;
+package br.dev.fscarmo.ixcorm.api;
 
 
-import br.dev.fscarmo.ixcorm.api.ORM;
+import br.dev.fscarmo.ixcorm.IxcContext;
+import br.dev.fscarmo.ixcorm.IxcResponse;
 import br.dev.fscarmo.ixcorm.api.records.Header;
+import br.dev.fscarmo.ixcorm.exception.NetworkConnectionException;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -18,81 +20,80 @@ import java.util.List;
 
 /**
  * <p>
- * A classe 'IxcRequest' manipula a query de busca, constrói o objeto HTTP que executa a requisição e expões métodos que
+ * A classe 'OrmClient' manipula a query de busca, constrói o objeto HTTP que executa a requisição e expões métodos que
  * retornam a resposta.
  * </p>
  *
- * <p>
- * Essa classe não pode ser instanciada, pois ela existe apenas com a finalizada de encapsular toda a lógica da
- * requisição e resposta HTTP. A maneira correta de utilizá-la é através de herança, como no exemplo a seguir:
- * </p>
- *
- * {@snippet lang=java:
- *
- * class Cliente extends IxcRequest {
- *
- *     private Cliente() {
- *         super("cliente");
- *     }
- *
- *     public static Cliente newBuilder() {
- *         return new Cliente();
- *     }
- * }
- *
- * Cliente cliente = Cliente.newBuilder()
- *         .where("razao").exactly("João")
- *         .where("data_nascimento").greaterThan("1999-01-01")
- *
- * }
- *
  * @author Felipe S. Carmo
- * @version 1.0.2
+ * @version 1.2.0
  * @since 2025-09-27
  */
-public abstract class IxcRequest extends ORM {
+public abstract class OrmClient {
 
+
+    private String body;
     private final List<Header> headers = new ArrayList<>();
+    private final String table;
     private URI uri;
 
-    public IxcRequest(String table) {
-        super(table);
+
+    protected OrmClient(String table) {
+        this.table = table;
         setupDefaultHeaders();
         setupUri();
     }
 
-    public IxcResponse GET() {
+
+    public IxcResponse GET() throws NetworkConnectionException {
         enableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("POST");
         return new IxcResponse(response);
     }
 
-    public IxcResponse POST() {
+    public IxcResponse POST() throws NetworkConnectionException {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("POST");
         return new IxcResponse(response);
     }
 
-    public IxcResponse PUT() {
+    public IxcResponse PUT() throws NetworkConnectionException {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("PUT");
         return new IxcResponse(response);
     }
 
-    public IxcResponse DELETE() {
+    public IxcResponse DELETE() throws NetworkConnectionException {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("DELETE");
         return new IxcResponse(response);
     }
 
-    private HttpResponse<String> sendRequestAndGetResponse(String method) {
-        try (HttpClient client = HttpClient.newHttpClient()) {
 
+    protected void setBody(String body) {
+        this.body = body;
+    }
+
+    protected String getTable() {
+        return table;
+    }
+
+
+    /**
+     * <p>
+     * Executa uma requisição HTTP e devolve um <b>HttpResponse<String></b>, se a requisição for bem sucedida.
+     * </p>
+     *
+     * @param method Define o método da requsição (GET | POST | PUT | DELETE)
+     * @return Um {@link HttpResponse}, caso a requisição seja bem sucedida.
+     * @throws NetworkConnectionException Se ocorrer qualquer tipo de erro na rede.
+     */
+    private HttpResponse<String> sendRequestAndGetResponse(String method) throws NetworkConnectionException {
+
+        try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(uri);
-            String jsonBody = super.getQueryAsJSON();
 
             // OBS: Definindo o (method) de forma dinâmica
-            requestBuilder.method(method, HttpRequest.BodyPublishers.ofString(jsonBody));
+            requestBuilder.method(method, HttpRequest.BodyPublishers.ofString(body));
 
             // ATENÇÃO: (Side Effect) no "requestBuilder"
             includeHeadersOnRequestBuilder(requestBuilder);
@@ -103,8 +104,7 @@ public abstract class IxcRequest extends ORM {
             );
         }
         catch (UncheckedIOException | InterruptedException | IOException e) {
-            IO.println(e);
-            throw new RuntimeException(e);
+            throw new NetworkConnectionException();
         }
     }
 
@@ -115,14 +115,13 @@ public abstract class IxcRequest extends ORM {
     }
 
     private void setupDefaultHeaders() {
-        headers.add(Header.of("Authorization", "Basic "+ this.getTokenFromContext()));
+        headers.add(Header.of("Authorization", "Basic " + this.getEncodedTokenFromContext()));
         headers.add(Header.of("Content-Type", "application/json"));
     }
 
     private void setupUri() {
         String domain = IxcContext.INSTANCE.getEnv().getDomain();
-        String table = getTable();
-        uri = URI.create("https://"+ domain +"/webservice/v1/"+ table);
+        uri = URI.create("https://"+ domain + "/webservice/v1/"+ table);
     }
 
     private void enableListingHeader() {
@@ -143,7 +142,7 @@ public abstract class IxcRequest extends ORM {
                 .isEmpty();
     }
 
-    private String getTokenFromContext() {
+    private String getEncodedTokenFromContext() {
         String tokenFromEnv = IxcContext.INSTANCE.getEnv().getToken();
         byte[] bytes = tokenFromEnv.getBytes(StandardCharsets.UTF_8);
         return Base64.getEncoder().encodeToString(bytes);
