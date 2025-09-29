@@ -4,6 +4,7 @@ package br.dev.fscarmo.ixcorm.api;
 import br.dev.fscarmo.ixcorm.IxcContext;
 import br.dev.fscarmo.ixcorm.IxcResponse;
 import br.dev.fscarmo.ixcorm.api.records.Header;
+import br.dev.fscarmo.ixcorm.exception.NetworkConnectionException;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -43,28 +44,28 @@ public abstract class OrmClient {
     }
 
 
-    public IxcResponse GET(Class<?> responseFormat) {
+    public IxcResponse GET() throws NetworkConnectionException {
         enableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("POST");
-        return new IxcResponse(response, responseFormat);
+        return new IxcResponse(response);
     }
 
-    public IxcResponse POST(Class<?> responseFormat) {
+    public IxcResponse POST() throws NetworkConnectionException {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("POST");
-        return new IxcResponse(response, responseFormat);
+        return new IxcResponse(response);
     }
 
-    public IxcResponse PUT(Class<?> responseFormat) {
+    public IxcResponse PUT() throws NetworkConnectionException {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("PUT");
-        return new IxcResponse(response, responseFormat);
+        return new IxcResponse(response);
     }
 
-    public IxcResponse DELETE(Class<?> responseFormat) {
+    public IxcResponse DELETE() throws NetworkConnectionException {
         disableListingHeader();
         HttpResponse<String> response = sendRequestAndGetResponse("DELETE");
-        return new IxcResponse(response, responseFormat);
+        return new IxcResponse(response);
     }
 
 
@@ -77,7 +78,17 @@ public abstract class OrmClient {
     }
 
 
-    private HttpResponse<String> sendRequestAndGetResponse(String method) {
+    /**
+     * <p>
+     * Executa uma requisição HTTP e devolve um <b>HttpResponse<String></b>, se a requisição for bem sucedida.
+     * </p>
+     *
+     * @param method Define o método da requsição (GET | POST | PUT | DELETE)
+     * @return Um {@link HttpResponse}, caso a requisição seja bem sucedida.
+     * @throws NetworkConnectionException Se ocorrer qualquer tipo de erro na rede.
+     */
+    private HttpResponse<String> sendRequestAndGetResponse(String method) throws NetworkConnectionException {
+
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(uri);
 
@@ -93,8 +104,7 @@ public abstract class OrmClient {
             );
         }
         catch (UncheckedIOException | InterruptedException | IOException e) {
-            IO.println(e);
-            throw new RuntimeException(e);
+            throw new NetworkConnectionException();
         }
     }
 
