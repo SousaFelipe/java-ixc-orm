@@ -14,8 +14,8 @@ import java.util.List;
 
 /**
  * <p>
- * A classe 'IxcOrm' expõe métodos que geram uma query de busca. Além de herdar o comportamento da classe
- * {@link OrmClient} para expor os métodos que executam requisições HTTP, para a API do IXC Provedor.
+ * A classe 'IxcOrm' expõe métodos que geram uma query de busca e herda o comportamento da classe {@link OrmClient}
+ * para expor os métodos que executam requisições HTTP, para a API do IXC Provedor.
  * </p>
  *
  * <p>
@@ -42,41 +42,40 @@ import java.util.List;
  * }
  * }
  *
- * <p>
- * Essa classe não pode ser instanciada, pois ela existe apenas com a finalizada de encapsular toda a lógica da
- * requisição e a resposta HTTP. A maneira correta de utilizá-la é através de herança, como no exemplo a seguir:
- * </p>
- *
- * {@snippet lang = java:
- * class Cliente extends IxcOrm {
- *
- *     private Cliente() {
- *         super("cliente");
- *     }
- *
- *     public void listaClientesPorNome(String nome) {
- *         IxcResponse response = Cliente.newBuilder()
- *                .where("razao").like(nome)
- *                .GET();
- *         IO.println(response.getStatusCode());
- *         IO.println(response.getBody());
- *     }
- * }
- *}
- *
  * @author Felipe S. Carmo
  * @version 2.0.0
  * @since 2025-09-27
  */
 public abstract class IxcOrm extends OrmClient {
 
-
     private final List<Parameter> parameters;
     private Ordering ordering;
     private Pagination pagination;
     private Parameter.Builder parameterBuilder;
 
-
+    /**
+     * <p>
+     * 'IxcOrm' não pode ser instanciada, pois ela existe apenas para encapsular a lógica da requisição e da resposta
+     * HTTP. A maneira correta de utilizá-la é através de herança, como no exemplo a seguir:
+     * </p>
+     *
+     * {@snippet lang = java:
+     * class Cliente extends IxcOrm {
+     *
+     *     private Cliente() {
+     *         super("cliente");
+     *     }
+     *
+     *     public void listaClientesPorNome(String nome) {
+     *         IxcResponse response = new Cliente()
+     *                .where("razao").like(nome)
+     *                .GET();
+     *         IO.println(response.getStatusCode());
+     *     }
+     * }
+     *}
+     * @param table O nome da tabela a ser consultada no IXC.
+     */
     protected IxcOrm(String table) {
         super(table);
         parameters = new ArrayList<>();
@@ -85,17 +84,39 @@ public abstract class IxcOrm extends OrmClient {
         parameterBuilder = Parameter.newBuilder(table);
     }
 
-
+    /**
+     * Define a paginação na query de consulta.
+     *
+     * @param pagination Um objeto {@link Pagination} com as configurações de paginação.
+     * @return A própria instância de {@link IxcOrm}.
+     */
     public IxcOrm setPagination(Pagination pagination) {
         this.pagination = pagination;
         return this;
     }
 
+    /**
+     * <p>
+     * Inicia um novo objeto de parâmetro, para a propriedade <b>grid_param</b> da query.
+     * </p>
+     *
+     * @param column O campo da tabela que será usado como filtro na busca.
+     * @return A própria instância de {@link IxcOrm}.
+     */
     public IxcOrm where(String column) {
         parameterBuilder.type(column);
         return this;
     }
 
+    /**
+     * <p>
+     * Adiciona o operador de comparação (L) e o valor a ser filtrado, no objeto de parâmetro, iniciado por
+     * <b>where(String column)</b>.
+     * </p>
+     *
+     * @param value O valor do campo da tabela que será usado como filtro na busca.
+     * @return A própria instância de {@link IxcOrm}.
+     */
     public IxcOrm like(Object value) {
         parameterBuilder.operator(Operator.LIKE);
         parameterBuilder.value(value);
@@ -104,6 +125,15 @@ public abstract class IxcOrm extends OrmClient {
         return this;
     }
 
+    /**
+     * <p>
+     * Adiciona o operador de comparação (=) e o valor a ser filtrado, no objeto de parâmetro, iniciado por
+     * <b>where(String column)</b>.
+     * </p>
+     *
+     * @param value O valor do campo da tabela que será usado como filtro na busca.
+     * @return A própria instânci de {@link IxcOrm}.
+     */
     public IxcOrm exactly(Object value) {
         parameterBuilder.operator(Operator.EQUALS);
         parameterBuilder.value(value);
@@ -112,6 +142,15 @@ public abstract class IxcOrm extends OrmClient {
         return this;
     }
 
+    /**
+     * <p>
+     * Adiciona o operador de comparação (<) e o valor a ser filtrado, no objeto de parâmetro, iniciado por
+     * <b>where(String column)</b>.
+     * </p>
+     *
+     * @param value O valor do campo da tabela que será usado como filtro na busca.
+     * @return A própria instância de {@link IxcOrm}.
+     */
     public IxcOrm lessThan(Object value) {
         parameterBuilder.operator(Operator.LESS_THAN);
         parameterBuilder.value(value);
@@ -120,6 +159,15 @@ public abstract class IxcOrm extends OrmClient {
         return this;
     }
 
+    /**
+     * <p>
+     * Adiciona o operador de comparação (<=) e o valor a ser filtrado, no objeto de parâmetro, iniciado por
+     * <b>where(String column)</b>.
+     * </p>
+     *
+     * @param value O valor do campo da tabela que será usado como filtro na busca.
+     * @return A própria instância de {@link IxcOrm}.
+     */
     public IxcOrm lessThanEquals(Object value) {
         parameterBuilder.operator(Operator.LESS_THAN_EQUALS);
         parameterBuilder.value(value);
@@ -128,6 +176,15 @@ public abstract class IxcOrm extends OrmClient {
         return this;
     }
 
+    /**
+     * <p>
+     * Adiciona o operador de comparação (>) e o valor a ser filtrado, no objeto de parâmetro, iniciado por
+     * <b>where(String column)</b>.
+     * </p>
+     *
+     * @param value O valor do campo da tabela que será usado como filtro na busca.
+     * @return A própria instância de {@link IxcOrm}.
+     */
     public IxcOrm greaterThan(Object value) {
         parameterBuilder.operator(Operator.GREATER_THAN);
         parameterBuilder.value(value);
@@ -136,6 +193,15 @@ public abstract class IxcOrm extends OrmClient {
         return this;
     }
 
+    /**
+     * <p>
+     * Adiciona o operador de comparação (>=) e o valor a ser filtrado, no objeto de parâmetro, iniciado por
+     * <b>where(String column)</b>.
+     * </p>
+     *
+     * @param value O valor do campo da tabela que será usado como filtro na busca.
+     * @return A própria instância de {@link IxcOrm}.
+     */
     public IxcOrm greaterThanEquals(Object value) {
         parameterBuilder.operator(Operator.GREATER_THAN_EQUALS);
         parameterBuilder.value(value);
@@ -144,26 +210,53 @@ public abstract class IxcOrm extends OrmClient {
         return this;
     }
 
+    /**
+     * <p>
+     * Define como a API do IXC Provedor deverá ordenar os dados retornadaos pela busca.
+     * </p>
+     *
+     * @param order O tipo de ordenação (asc | desc).
+     * @param column O Campo da tabela que será usado para ordenar os registros retornados.
+     * @return A própria instânci de {@link IxcOrm}.
+     */
     public IxcOrm orderBy(Sort order, String column) {
         ordering = new Ordering(column, order);
         setBody(getQueryAsJson());
         return this;
     }
 
-
+    /**
+     * <p>
+     * Concatena as propriedades da query e a propriedade <b>grid_param</b> e retorna como uma {@link String}
+     * no formato JSON.
+     * </p>
+     *
+     * @return Uma {@link String} no formato JSON.
+     */
     protected String getQueryAsJson() {
         String jsonGueryProps = getQueryPropsAsJson();
         String jsonGridParams = getGridParamsAsJson();
         return "{"+ jsonGueryProps + jsonGridParams +"}";
     }
 
-
+    /**
+     * <p>
+     * Adiciona um objeto de parâmetros de busca à lista de parâmetros, e "reseta" construtor de parâmetros.
+     * </p>
+     */
     private void addParamToGridAndReset() {
         String table = getTable();
         parameters.add(parameterBuilder.build());
         parameterBuilder = Parameter.newBuilder(table);
     }
 
+    /**
+     * <p>
+     * Gera uma {@link String} com todas as propriedades da query de busca, sem a propriedade <b>grid_param</b>.
+     * </p>
+     *
+     * @return Uma {@link String} no formato JSON.
+     */
     private String getQueryPropsAsJson() {
         return "\"qtype\":\""+ getTable() +"\"," +
                "\"query\":\"\"," +
@@ -174,6 +267,13 @@ public abstract class IxcOrm extends OrmClient {
                "\"sortorder\":\""+ ordering.sortOrder().value() +"\",";
     }
 
+    /**
+     * <p>
+     * Gera uma {@link String} com a propriedade <b>grid_param</b>, contendo uma lita de objetos de filtro.
+     * </p>
+     *
+     * @return Uma {@link String} no formato JSON.
+     */
     private String getGridParamsAsJson() {
         StringBuilder builded = new StringBuilder().append("\"grid_param\":\"[");
         for (Parameter param : parameters) {

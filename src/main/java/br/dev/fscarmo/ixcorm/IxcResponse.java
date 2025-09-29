@@ -21,9 +21,7 @@ import java.net.http.HttpResponse;
 @SuppressWarnings("ClassCanBeRecord")
 public class IxcResponse {
 
-
     private final HttpResponse<String> response;
-
 
     /**
      * @param response Um {@link HttpResponse} devolvido pelo método <b>send()</b> da classe {@link HttpClient}.
