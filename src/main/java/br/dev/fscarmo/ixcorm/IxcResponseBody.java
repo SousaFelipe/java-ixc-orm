@@ -1,8 +1,7 @@
 package br.dev.fscarmo.ixcorm;
 
 
-import br.dev.fscarmo.ixcorm.api.Mapper;
-import br.dev.fscarmo.ixcorm.api.MapperFactory;
+import br.dev.fscarmo.ixcorm.api.RecordMapperFactory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -45,10 +44,10 @@ public class IxcResponseBody {
         return total;
     }
 
-    public <T extends Mapper> List<T> getRegistros(Class<T> mapper) {
+    public <T extends IxcRecordMapper> List<T> getRegistros(Class<T> mapper) {
         JsonArray jsonElements = jsonObject.getAsJsonArray("registros");
         if (jsonElements != null) {
-            MapperFactory<T> factory = new MapperFactory<>(mapper);
+            RecordMapperFactory<T> factory = new RecordMapperFactory<>(mapper);
             return jsonElements.asList().stream().map(factory::newMapper).toList();
         }
         return new ArrayList<>();

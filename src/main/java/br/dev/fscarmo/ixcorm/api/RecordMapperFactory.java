@@ -1,19 +1,20 @@
 package br.dev.fscarmo.ixcorm.api;
 
 
+import br.dev.fscarmo.ixcorm.IxcRecordMapper;
 import com.google.gson.JsonElement;
 
 import java.lang.reflect.InvocationTargetException;
 
 
 @SuppressWarnings("ClassCanBeRecord")
-public class MapperFactory<T extends Mapper> {
+public class RecordMapperFactory<T extends IxcRecordMapper> {
 
 
     private final Class<T> mapperClass;
 
 
-    public MapperFactory(Class<T> mapperClass) {
+    public RecordMapperFactory(Class<T> mapperClass) {
         this.mapperClass = mapperClass;
     }
 

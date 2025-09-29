@@ -1,11 +1,10 @@
 package br.dev.fscarmo.ixcorm;
 
 
-import br.dev.fscarmo.ixcorm.api.Mapper;
 import com.google.gson.JsonElement;
 
 
-public class ClienteMapper extends Mapper {
+public class ClienteMapper extends IxcRecordMapper {
 
 
     private String razao;

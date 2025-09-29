@@ -1,16 +1,16 @@
-package br.dev.fscarmo.ixcorm.api;
+package br.dev.fscarmo.ixcorm;
 
 
 import com.google.gson.JsonElement;
 
 
-public abstract class Mapper {
+public abstract class IxcRecordMapper {
 
 
     private final JsonElement jsonElement;
 
 
-    public Mapper(JsonElement jsonElement) {
+    public IxcRecordMapper(JsonElement jsonElement) {
         this.jsonElement = jsonElement;
         map();
     }
