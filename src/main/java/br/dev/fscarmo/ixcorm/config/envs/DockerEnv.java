@@ -36,16 +36,6 @@ public class DockerEnv extends Environment {
         setDomain(domain);
     }
 
-    /**
-     * <p>
-     * Acessa as variáveis de ambiente Docker, ou do sistema, e busca por uma variável correspondente à chave forneceida
-     * pelo parâmetro <b>key.</b>
-     * </p>
-     *
-     * @param key A chave para acessar a variável de ambiente.
-     * @return O valor da variável de ambiente encontrada.
-     * @throws UnreadableDockerEnvException Se a variável de ambiente não é encontrada.
-     */
     private String getEnvVarFromSystem(String key) throws UnreadableDockerEnvException {
         String envVar = System.getenv(key);
         if (envVar == null) {

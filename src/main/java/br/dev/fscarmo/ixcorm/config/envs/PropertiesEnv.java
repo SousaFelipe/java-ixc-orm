@@ -42,14 +42,6 @@ public class PropertiesEnv extends Environment {
         setDomain(domain);
     }
 
-    /**
-     * <p>
-     * Acessa o arquivo <b>application.properties</b> e procura a propriedade pela chave passada no parâmetro <b>key.</b>
-     * </p>
-     *
-     * @param key A chave para acessar a variável de ambiente.
-     * @return Um {@link Optional} contendo uma {@link String}, caso a variável de ambiente seja encontrada.
-     */
     private Optional<String> getEnvVarFromProperties(String key) {
 
         InputStream stream = getClass().getClassLoader().getResourceAsStream("application.properties");
@@ -63,17 +55,6 @@ public class PropertiesEnv extends Environment {
         return Optional.empty();
     }
 
-    /**
-     * <p>
-     * Recebe um {@link InputStream}, com o conteúdo do arquivo a ser lido e coloca seu conteúdo em um objeto
-     * {@link Properties}.
-     * </p>
-     *
-     * @param stream O conteúdo do arquivo que será lido.
-     * @return Um objeto {@link Properties} contendo as variáveis de ambiente.
-     * @throws RuntimeException Se o <b>stream</b> for nulo, se ele estiver num formato inelegível, ou se houver um erro
-     * genérico enquanto a leitura dele é executada.
-     */
     private Properties getPropertiesFromStream(InputStream stream) throws RuntimeException {
         try {
             Properties properties = new Properties();
