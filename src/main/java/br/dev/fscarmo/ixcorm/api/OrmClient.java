@@ -2,8 +2,10 @@ package br.dev.fscarmo.ixcorm.api;
 
 
 import br.dev.fscarmo.ixcorm.IxcContext;
+import br.dev.fscarmo.ixcorm.IxcRecord;
 import br.dev.fscarmo.ixcorm.IxcResponse;
 import br.dev.fscarmo.ixcorm.api.records.Header;
+import br.dev.fscarmo.ixcorm.enums.Method;
 import br.dev.fscarmo.ixcorm.exception.NetworkConnectionException;
 
 import java.io.IOException;
@@ -30,112 +32,152 @@ import java.util.List;
  */
 public abstract class OrmClient {
 
-    private String body;
     private final List<Header> headers = new ArrayList<>();
     private final String table;
+    private String query;
     private URI uri;
 
+    /**
+     * @param table Aqui, representa endpoint para o qual a requisição será executada.
+     */
     protected OrmClient(String table) {
         this.table = table;
         setupDefaultHeaders();
-        setupUri();
-    }
-
-    public IxcResponse GET() throws NetworkConnectionException {
-        enableListingHeader();
-        HttpResponse<String> response = sendRequestAndGetResponse("POST");
-        return new IxcResponse(response);
-    }
-
-    public IxcResponse POST() throws NetworkConnectionException {
-        disableListingHeader();
-        HttpResponse<String> response = sendRequestAndGetResponse("POST");
-        return new IxcResponse(response);
-    }
-
-    public IxcResponse PUT() throws NetworkConnectionException {
-        disableListingHeader();
-        HttpResponse<String> response = sendRequestAndGetResponse("PUT");
-        return new IxcResponse(response);
-    }
-
-    public IxcResponse DELETE() throws NetworkConnectionException {
-        disableListingHeader();
-        HttpResponse<String> response = sendRequestAndGetResponse("DELETE");
-        return new IxcResponse(response);
-    }
-
-    protected void setBody(String body) {
-        this.body = body;
-    }
-
-    protected String getTable() {
-        return table;
     }
 
     /**
      * <p>
-     * Executa uma requisição HTTP e devolve um <b>HttpResponse<String></b>, se a requisição for bem sucedida.
+     * Envia uma requisição HTTP para a API do IXC Provedor, para listar registros filtrados pela query de busca.
+     * A requisição é do tipo POST, o que define que ela irá listar registros é a presença do header:
+     * ["ixcsoft": "listar"].
      * </p>
      *
-     * @param method Define o método da requsição (GET | POST | PUT | DELETE)
-     * @return Um {@link HttpResponse}, caso a requisição seja bem sucedida.
-     * @throws NetworkConnectionException Se ocorrer qualquer tipo de erro na rede.
+     * @return Um objeto {@link IxcResponse}.
+     * @throws NetworkConnectionException Se ocorrer alguma falha na comunicação com o IXC Provedor.
      */
-    private HttpResponse<String> sendRequestAndGetResponse(String method) throws NetworkConnectionException {
+    public IxcResponse GET() throws NetworkConnectionException {
+        setupUri();
+        enableIxcListingHeader();
+        HttpResponse<String> response = sendRequest(Method.POST, query);
+        return new IxcResponse(response);
+    }
 
+    /**
+     * <p>
+     * Envia uma requisição HTTP para a API do IXC Provedor, para listar registros filtrados pela query de busca.
+     * A requisição é do tipo POST, o que define que ela irá listar registros é a presença do header:
+     * ["ixcsoft": "listar"].
+     * </p>
+     *
+     * @return Um objeto {@link IxcResponse}.
+     * @throws NetworkConnectionException Se ocorrer alguma falha na comunicação com o IXC Provedor.
+     */
+    public IxcResponse POST(IxcRecord record) throws NetworkConnectionException {
+        setupUri(record.getId());
+        disableIxcListingHeader();
+        HttpResponse<String> response = sendRequest(Method.POST, record.toJsonString());
+        return new IxcResponse(response);
+    }
+
+    /**
+     * TODO: Documentar
+     * @param record
+     * @return
+     * @throws NetworkConnectionException
+     */
+    public IxcResponse PUT(IxcRecord record) throws NetworkConnectionException {
+        setupUri(record.getId());
+        disableIxcListingHeader();
+        HttpResponse<String> response = sendRequest(Method.PUT, record.toJsonString());
+        return new IxcResponse(response);
+    }
+
+    /**
+     * TODO: Documentar
+     * @param id
+     * @return
+     * @throws NetworkConnectionException
+     */
+    public IxcResponse DELETE(Long id) throws NetworkConnectionException {
+        setupUri(id);
+        disableIxcListingHeader();
+        HttpResponse<String> response = sendRequest(Method.DELETE);
+        return new IxcResponse(response);
+    }
+
+    /**
+     * TODO: Documentar
+     * @param query
+     */
+    protected void setQuery(String query) {
+        this.query = query;
+    }
+
+    /**
+     * TODO: Documentar
+     * @return
+     */
+    protected String getTable() {
+        return table;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private HttpResponse<String> sendRequest(Method method) throws NetworkConnectionException {
         try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(uri);
-
-            // OBS: Definindo o (method) de forma dinâmica
-            requestBuilder.method(method, HttpRequest.BodyPublishers.ofString(body));
-
-            // TODO: (Side Effect) na variável "requestBuilder"
-            includeHeadersOnRequestBuilder(requestBuilder);
-
-            return client.send(
-                    requestBuilder.build(),
-                    HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)
-            );
+            HttpRequest.Builder builder = getCommonRequestBuilder(method, HttpRequest.BodyPublishers.noBody());
+            return client.send(builder.build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
         }
         catch (UncheckedIOException | InterruptedException | IOException e) {
             throw new NetworkConnectionException();
         }
     }
 
-    private void includeHeadersOnRequestBuilder(HttpRequest.Builder builder) {
-        for (Header header : headers) {
-            builder.setHeader(header.name(), header.value());
+    private HttpResponse<String> sendRequest(Method method, String body) throws NetworkConnectionException {
+        try (HttpClient client = HttpClient.newHttpClient()) {
+            HttpRequest.Builder builder = getCommonRequestBuilder(method, HttpRequest.BodyPublishers.ofString(body));
+            return client.send(builder.build(), HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        }
+        catch (UncheckedIOException | InterruptedException | IOException e) {
+            throw new NetworkConnectionException();
         }
     }
 
-    private void setupDefaultHeaders() {
-        headers.add(Header.of("Authorization", "Basic " + this.getEncodedTokenFromContext()));
-        headers.add(Header.of("Content-Type", "application/json"));
+    private HttpRequest.Builder getCommonRequestBuilder(Method method, HttpRequest.BodyPublisher publisher) {
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(uri);
+        requestBuilder.method(method.value(), publisher);
+        headers.forEach(h -> requestBuilder.setHeader(h.getName(), h.getValue()));
+        return requestBuilder;
     }
 
     private void setupUri() {
         String domain = IxcContext.INSTANCE.getEnv().getDomain();
-        uri = URI.create("https://"+ domain + "/webservice/v1/"+ table);
+        uri = URI.create("https://"+ domain +"/webservice/v1/"+ table);
     }
 
-    private void enableListingHeader() {
-        if (isListingHeaderDisabled()) {
-            Header header = Header.of("ixcsoft", "listar");
-            headers.add(header);
-        }
+    private void setupUri(Long id) {
+        String domain = IxcContext.INSTANCE.getEnv().getDomain();
+        uri = URI.create("https://"+ domain +"/webservice/v1/"+ table +"/"+ id.toString());
     }
 
-    private void disableListingHeader() {
-        headers.removeIf(header -> header.hasName("ixcsoft"));
+    private void setupDefaultHeaders() {
+        String encodedToken = getEncodedTokenFromContext();
+        headers.add(Header.of("Authorization", "Basic "+ encodedToken));
+        headers.add(Header.of("Content-Type", "application/json"));
+        headers.add(Header.of("ixcsoft", ""));
     }
 
-    private boolean isListingHeaderDisabled() {
-        return headers.stream()
-                .filter(header -> header.hasName("ixcsoft"))
-                .findFirst()
-                .isEmpty();
+    private void enableIxcListingHeader() {
+        headers.stream()
+                .filter(h -> h.hasName("ixcsoft"))
+                .findFirst().ifPresent(h -> h.setValue("listar"));
     }
+
+    private void disableIxcListingHeader() {
+        headers.stream()
+                .filter(h -> h.hasName("ixcsoft"))
+                .findFirst().ifPresent(h -> h.setValue(""));
+    }
+
 
     private String getEncodedTokenFromContext() {
         String tokenFromEnv = IxcContext.INSTANCE.getEnv().getToken();

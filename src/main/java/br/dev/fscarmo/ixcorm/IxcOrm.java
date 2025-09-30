@@ -20,27 +20,8 @@ import java.util.List;
  *
  * <p>
  * Essa classe manipula as classes de ordenação, paginação e de construção de parâmetros, e gera um JSON compatível com
- * a query de busca da API do IXC Provedor, que possui o seguinte formato:
+ * a query de busca da API do IXC Provedor.
  * </p>
- *
- * {@snippet lang=json:
- * {
- *     "qtype": "cliente",
- *     "query": "",
- *     "oper": "",
- *     "page": "1",
- *     "rg": 20,
- *     "sortname": "asc",
- *     "sortorder": "cliente.id",
- *     "grid_param": [
- *         {
- *             "TB": "cliente.razao",
- *             "OP": "L",
- *             "P": "nome do cliente (nesse caso)"
- *         }
-     ]
- * }
- * }
  *
  * @author Felipe S. Carmo
  * @version 2.0.0
@@ -121,7 +102,7 @@ public abstract class IxcOrm extends OrmClient {
         parameterBuilder.operator(Operator.LIKE);
         parameterBuilder.value(value);
         addParamToGridAndReset();
-        setBody(getQueryAsJson());
+        setQuery(getQueryAsJson());
         return this;
     }
 
@@ -138,7 +119,7 @@ public abstract class IxcOrm extends OrmClient {
         parameterBuilder.operator(Operator.EQUALS);
         parameterBuilder.value(value);
         addParamToGridAndReset();
-        setBody(getQueryAsJson());
+        setQuery(getQueryAsJson());
         return this;
     }
 
@@ -155,7 +136,7 @@ public abstract class IxcOrm extends OrmClient {
         parameterBuilder.operator(Operator.LESS_THAN);
         parameterBuilder.value(value);
         addParamToGridAndReset();
-        setBody(getQueryAsJson());
+        setQuery(getQueryAsJson());
         return this;
     }
 
@@ -172,7 +153,7 @@ public abstract class IxcOrm extends OrmClient {
         parameterBuilder.operator(Operator.LESS_THAN_EQUALS);
         parameterBuilder.value(value);
         addParamToGridAndReset();
-        setBody(getQueryAsJson());
+        setQuery(getQueryAsJson());
         return this;
     }
 
@@ -189,7 +170,7 @@ public abstract class IxcOrm extends OrmClient {
         parameterBuilder.operator(Operator.GREATER_THAN);
         parameterBuilder.value(value);
         addParamToGridAndReset();
-        setBody(getQueryAsJson());
+        setQuery(getQueryAsJson());
         return this;
     }
 
@@ -206,7 +187,7 @@ public abstract class IxcOrm extends OrmClient {
         parameterBuilder.operator(Operator.GREATER_THAN_EQUALS);
         parameterBuilder.value(value);
         addParamToGridAndReset();
-        setBody(getQueryAsJson());
+        setQuery(getQueryAsJson());
         return this;
     }
 
@@ -221,42 +202,48 @@ public abstract class IxcOrm extends OrmClient {
      */
     public IxcOrm orderBy(Sort order, String column) {
         ordering = new Ordering(column, order);
-        setBody(getQueryAsJson());
+        setQuery(getQueryAsJson());
         return this;
     }
 
     /**
      * <p>
-     * Concatena as propriedades da query e a propriedade <b>grid_param</b> e retorna como uma {@link String}
-     * no formato JSON.
+     * Concatena as propriedades da query e a propriedade <b>grid_param</b> e retorna como uma query no seguinte
+     * formato:
      * </p>
      *
+     * {@snippet lang=json:
+     * {
+     *     "qtype": "cliente",
+     *     "query": "",
+     *     "oper": "",
+     *     "page": "1",
+     *     "rg": 20,
+     *     "sortname": "asc",
+     *     "sortorder": "cliente.id",
+     *     "grid_param": [
+     *         {
+     *             "TB": "cliente.razao",
+     *             "OP": "L",
+     *             "P": "nome do cliente (nesse caso)"
+     *         }
+     *     ]
+     * }
+     * }
      * @return Uma {@link String} no formato JSON.
      */
     protected String getQueryAsJson() {
         String jsonGueryProps = getQueryPropsAsJson();
         String jsonGridParams = getGridParamsAsJson();
-        return "{"+ jsonGueryProps + jsonGridParams +"}";
+        return "{"+ jsonGueryProps +","+ jsonGridParams +"}";
     }
 
-    /**
-     * <p>
-     * Adiciona um objeto de parâmetros de busca à lista de parâmetros, e "reseta" construtor de parâmetros.
-     * </p>
-     */
     private void addParamToGridAndReset() {
         String table = getTable();
         parameters.add(parameterBuilder.build());
         parameterBuilder = Parameter.newBuilder(table);
     }
 
-    /**
-     * <p>
-     * Gera uma {@link String} com todas as propriedades da query de busca, sem a propriedade <b>grid_param</b>.
-     * </p>
-     *
-     * @return Uma {@link String} no formato JSON.
-     */
     private String getQueryPropsAsJson() {
         return "\"qtype\":\""+ getTable() +"\"," +
                "\"query\":\"\"," +
@@ -264,16 +251,9 @@ public abstract class IxcOrm extends OrmClient {
                "\"page\":"+ pagination.page() +"," +
                "\"rp\":"+ pagination.rows() +"," +
                "\"sortname\":\""+ ordering.sortName() +"\"," +
-               "\"sortorder\":\""+ ordering.sortOrder().value() +"\",";
+               "\"sortorder\":\""+ ordering.sortOrder().value() +"\"";
     }
 
-    /**
-     * <p>
-     * Gera uma {@link String} com a propriedade <b>grid_param</b>, contendo uma lita de objetos de filtro.
-     * </p>
-     *
-     * @return Uma {@link String} no formato JSON.
-     */
     private String getGridParamsAsJson() {
         StringBuilder builded = new StringBuilder().append("\"grid_param\":\"[");
         for (Parameter param : parameters) {
