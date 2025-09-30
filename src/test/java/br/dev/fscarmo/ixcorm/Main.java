@@ -12,11 +12,21 @@ public class Main {
         IxcContext.INSTANCE.setEnv(new PropertiesEnv());
 
         IxcResponse response = Cliente.newCliente()
-                .where("razao").like("FELIPE DE SOUSA DO")
-                .where("data_nascimento").greaterThanEquals("1996-11-10")
+                .where("razao").like("FELIPE DE SOUSA")
+                .where("data_nascimento").greaterThanEquals("1991-01-01")
                 .GET();
 
-        List<ClienteMapper> clientes = response.getBody().getRegistros(ClienteMapper.class);
-        clientes.forEach(c -> IO.println(c.getRazao()));
+        IxcResponseBody responseBody = response.getBody();
+        List<Cliente.Record> clientes = responseBody.getRegistros(Cliente.Record.class);
+
+        IO.println("");
+        IO.println("Total de registros encontrados: "+ responseBody.getTotal());
+        IO.println("Página: "+ responseBody.getPage());
+
+        clientes.forEach(c -> {
+            IO.println("ID: "+ c.getId());
+            IO.println("CPF: "+ c.getCnpjCpf());
+            IO.println("Nome: "+ c.getRazao());
+        });
     }
 }
