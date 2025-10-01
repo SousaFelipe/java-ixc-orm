@@ -1,6 +1,7 @@
 package br.dev.fscarmo.ixcorm;
 
 
+import br.dev.fscarmo.ixcorm.api.IxcRecordMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -23,33 +24,29 @@ import com.google.gson.JsonObject;
 public abstract class IxcRecord {
 
     private final JsonElement jsonElement;
-    private Long id;
+    private Integer id;
 
     /**
-     * @param jsonElement Um {@link JsonElement} representando um registro dentro da lista de <b>registros</b> no corpo da resposta
-     *                    HTTP da API do IXC Provedor.
+     * @param jsonElement Um {@link JsonElement} representando um <b>registro</b> dentro da lista de <b>registros</b>
+     *                    no corpo da resposta HTTP da API do IXC Provedor.
      */
     public IxcRecord(JsonElement jsonElement) {
         this.jsonElement = jsonElement;
-        map();
-        mapId();
+        IxcRecordMapper.map(this);
     }
 
-    /**
-     * <p>
-     * Retora o ID do registro, por ser a única propriedade comum dentre todas as tabelas do IXC Provedor.
-     * </p>
-     *
-     * @return {@link Long} ID.
-     */
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     /**
      * <p>
-     * Melhor opção para utilizar, quando ser quer enviar o registro pelo corpo de uma requisição, a fim de inseri-lo ou
-     * atualizá-lo.
+     * Melhor opção para utilizar, quando se pretende enviar o registro pelo corpo de uma requisição, a fim de
+     * inseri-lo ou atualizá-lo.
      * </p>
      *
      * @return Uma {@link String} no formato JSON, sem a propriedade "id" do registro.
@@ -73,28 +70,7 @@ public abstract class IxcRecord {
      * @return Um {@link JsonObject} com a proriedade passada em <b>property</b>. Se <b>property</b> não for
      * encontrada, será retornado um <b>null.</b>
      */
-    protected JsonElement get(String property) {
+    public JsonElement getJsonElement(String property) {
         return jsonElement.getAsJsonObject().get(property);
-    }
-
-    /**
-     * @param property O nome da propriedade a ser verificada no objeto {@link JsonElement}.
-     * @return <b>true</b> ou <b>false</b>, dependendo se a propriedade foi encontrada ou não.
-     */
-    protected boolean elementHasProperty(String property) {
-        return jsonElement.getAsJsonObject().has(property);
-    }
-
-    /**
-     * <p>
-     * O mapeamento de todas as propriedes que se deseja obter do {@link JsonElement}, deve ser feito dentro da
-     * implementação dessa função.
-     * </p>
-     */
-    protected abstract void map();
-
-    private void mapId() {
-        JsonElement element = get("id");
-        id = (element == null) ? 0 : element.getAsLong();
     }
 }
