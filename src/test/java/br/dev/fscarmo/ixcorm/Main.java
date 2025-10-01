@@ -17,7 +17,7 @@ public class Main {
                 .GET();
 
         IxcResponseBody responseBody = response.getBody();
-        List<Cliente.Record> clientes = responseBody.getRegistros(Cliente.Record.class);
+        List<ClienteRecord> clientes = responseBody.getRegistros(ClienteRecord.class);
 
         IO.println("");
         IO.println("Total de registros encontrados: "+ responseBody.getTotal());
@@ -25,8 +25,13 @@ public class Main {
 
         clientes.forEach(c -> {
             IO.println("ID: "+ c.getId());
-            IO.println("CPF: "+ c.getCnpjCpf());
+            IO.println("CPF: "+ c.getDocumento());
             IO.println("Nome: "+ c.getRazao());
+            IO.println("Endereço: "+ c.getEndereco());
+            IO.println("Número: "+ c.getNumero());
+            IO.println("Bairro: "+ c.getBairro());
+            IO.println("Cód. Cidade: "+ c.getCidade());
+            IO.println("Cód. UF: "+ c.getUf());
         });
     }
 }
