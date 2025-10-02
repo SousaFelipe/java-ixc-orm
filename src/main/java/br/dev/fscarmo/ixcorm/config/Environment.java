@@ -17,10 +17,12 @@ public abstract class Environment {
     private String domain;
 
     /**
-     * Define o valor da variável de ambiente que armazena o token de acesso gerado pelo sistema IXC Provedor.
+     * <p>
+     * Define o valor da variável de ambiente que armazena o token de acesso gerado dentro do IXC Provedor.
+     * </p>
      *
      * <p>
-     * Se a variável de ambiente já tiver sido definida por <b>setToken(token)</b>, ela não será sobrescrita.
+     * Se a variável de ambiente já tiver sido definida por <b>setToken(String token)</b>, ela não será sobrescrita.
      * </p>
      *
      * @param token O novo valor do token.
@@ -35,11 +37,11 @@ public abstract class Environment {
 
     /**
      * <p>
-     * Define o valor da variável de ambiente que armazena o domínio do servidor do IXC Provedor.
+     * Define o valor da variável de ambiente que armazena o domínio do servidor IXC Provedor.
      * </p>
      *
      * <p>
-     * Se a variável de ambiente já tiver sido definida por <b>setDomain(domínio)</b>, ela não será sobrescrita.
+     * Se a variável de ambiente já tiver sido definida por <b>setDomain(String domain)</b>, ela não será sobrescrita.
      * </p>
      *
      * @param domain O novo valor do domínio.

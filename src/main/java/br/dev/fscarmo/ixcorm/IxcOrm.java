@@ -14,8 +14,9 @@ import java.util.List;
 
 /**
  * <p>
- * A classe 'IxcOrm' expõe métodos que geram uma query de busca e herda o comportamento da classe {@link OrmClient}
- * para expor os métodos que executam requisições HTTP, para a API do IXC Provedor.
+ * A classe 'IxcOrm' fornece métodos que geram uma query de busca e herda o comportamento da classe {@link OrmClient},
+ * para disponibilizar, através da mesma instância, os métodos que executam requisições HTTP, para a API do IXC
+ * Provedor.
  * </p>
  *
  * <p>
@@ -78,7 +79,7 @@ public abstract class IxcOrm extends OrmClient {
 
     /**
      * <p>
-     * Inicia um novo objeto de parâmetro, para a propriedade <b>grid_param</b> da query.
+     * Inicia um novo objeto de parâmetro para a propriedade <b>grid_param</b> da query.
      * </p>
      *
      * @param column O campo da tabela que será usado como filtro na busca.
@@ -208,8 +209,8 @@ public abstract class IxcOrm extends OrmClient {
 
     /**
      * <p>
-     * Concatena as propriedades da query e a propriedade <b>grid_param</b> e retorna como uma query no seguinte
-     * formato:
+     * Concatena as propriedades da query e a propriedade <b>grid_param</b> e os retorna em um único JSON, no
+     * seguinte formato:
      * </p>
      *
      * {@snippet lang=json:

@@ -6,7 +6,8 @@ import br.dev.fscarmo.ixcorm.enums.Operator;
 
 /**
  * <p>
- * A classe 'Parameter' representa um objeto da opção de 'grid_param', da API do IXC Provedor.
+ * A classe 'Parameter' representa um objeto da opção da propriedade <b>grid_param</b>, no corpo da query de busca da
+ * API do IXC Provedor.
  * </p>
  *
  * <p>
@@ -43,9 +44,9 @@ public class Parameter {
      * Cria uma nova instância de {@link Builder}
      * </p>
      *
-     * @param table O nome que representa a tabela do IXC, que o {@link Builder} usará para basear a construção da query
-     *             de busca.
-     * @return Uma nova instância de {@link Builder}
+     * @param table O nome que representa a tabela do IXC, que o {@link Builder} usará para basear a construção da
+     *              query de busca.
+     * @return Uma nova instância de {@link Builder}.
      */
     public static Builder newBuilder(String table) {
         return new Builder(table);
@@ -65,12 +66,12 @@ public class Parameter {
 
     /**
      * <p>
-     * A classe 'Builder' construirá um objeto da opção de 'grid_param', da API do IXC Provedor.
+     * A classe 'Builder' construirá um objeto da propriedade <b>grid_param</b>, no corpo da API do IXC Provedor.
      * </p>
      *
      * <p>
-     * Esta classe é responsável por validar e atribuir os valores corretos a cada propriedade do objeto que fará parte
-     * da lista de consulta 'grid_param'.
+     * Essa classe é responsável por validar e atribuir os valores corretos a cada propriedade do objeto que fará parte
+     * da lista de filtros <b>grid_param</b>.
      * </p>
      *
      * @author Felipe S. Carmo
@@ -119,7 +120,8 @@ public class Parameter {
          * Define o campo <b>P</b> do objeto de busca no filtro <b>grid_param</b> do IXC Provedor.
          * </p>
          *
-         * @param value Independente do tipo de valor passado, será convertido para {@link String}.
+         * @param value Independente do tipo de valor passado, será convertido para {@link String}, por questão de
+         *              compatibilidade com a  API do IXC Provedor.
          */
         public void value(Object value) {
             if (value != null) {

@@ -18,7 +18,7 @@ public abstract class Utils {
 
     /**
      * <p>
-     * A classe 'Text' possui métodos de formatação e mascaramento de texto.
+     * A classe 'Text' possui um único métpdo de "normalização" de texto.
      * </p>
      *
      * @author Felipe S. Carmo
@@ -32,7 +32,7 @@ public abstract class Utils {
          * Remove os caracteres especiais de um texto, fornecido pelo parâmetro <b>text.</b>
          * </p>
          *
-         * @param text A <b>String</b> a ser "formatada".
+         * @param text A <b>String</b> a ser "normalizada".
          * @return Uma nova <b>String</b>, sem caracteres especiais.
          */
         public static String normalize(String text) {

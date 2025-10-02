@@ -12,9 +12,9 @@ import java.util.List;
 
 /**
  * <p>
- * A classe 'IxcRecordMapper' fornece um método para mapear as proproedades de um {@link JsonElement}, passando os
+ * A classe 'IxcRecordMapper' fornece um método para mapear as propriedades de um {@link JsonElement}, passando os
  * respectivos valores para cada uma das propriedades correspondentes declaradas num objeto que herde de
- * {@link IxcRecord}b>.
+ * {@link IxcRecord}.
  * </p>
  *
  * @author Felipe S. Carmo
@@ -30,13 +30,14 @@ public abstract class IxcRecordMapper {
      * </p>
      *
      * <p>
-     * Se forem declaradas propriedades na classe herdeira de {@link IxcRecord}, que não existam no
-     * {@link JsonElement} de sua instância, tais propriedades permanecerão nulas. Do mesmo modo, a declaração de
-     * todas as propriedades que, possivelmente, façam parte do {@link JsonElement} da instância, não é obrigatória.
+     * Se forem declaradas propriedades na classe filha de {@link IxcRecord}, que não existam no {@link JsonElement}
+     * de sua instância, tais propriedades permanecerão nulas. Do mesmo modo, a declaração de todas as propriedades
+     * que, possívelmente, façam parte do {@link JsonElement} da instância, não é obrigatória.
      * </p>
      *
      * @param target Um objeto que herde de {@link IxcRecord}, contendo as propriedades cujo os identificadores
-     *               correspondam aos mesmos identificadores do objeto {@link JsonElement} de sua instância.
+     *               correspondam a identificadores de propriedades encontradas no objeto {@link JsonElement} de sua
+     *               instância.
      */
     public static void map(IxcRecord target) {
         List<Field> fields = getAllClassFields(target.getClass());

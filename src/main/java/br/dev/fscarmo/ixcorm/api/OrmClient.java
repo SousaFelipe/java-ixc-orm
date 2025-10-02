@@ -89,7 +89,7 @@ public abstract class OrmClient {
 
     /**
      * <p>
-     * Envia uma requisição HTTP para a API do IXC Provedor, para atualizar um ou mais colunas de um registro no banco
+     * Envia uma requisição HTTP para a API do IXC Provedor, para atualizar um ou mais campos de um registro no banco
      * de dados, na tabela definida pelo prâmetro <b>(String table)</b> no construtor.
      * </p>
      *
@@ -108,14 +108,14 @@ public abstract class OrmClient {
 
     /**
      * <p>
-     *
+     * Envia uma requisição HTTP para a API do IXC Provedor, para excluir um determinado registro do banco de dados.
      * </p>
      *
-     * @param id Um {@link Long} com o id do ergistro a ser removido do banco de dados do IXC Provedor.
+     * @param id Um {@link Integer} com o id do registro a ser removido do banco de dados do IXC Provedor.
      * @return Um objeto {@link IxcResponse}.
      * @throws NetworkConnectionException Se ocorrer alguma falha na comunicação com o IXC Provedor.
      */
-    public IxcResponse DELETE(int id) throws NetworkConnectionException {
+    public IxcResponse DELETE(Integer id) throws NetworkConnectionException {
         setupUri(id);
         disableIxcListingHeader();
         setupPublisherWithoutBody();

@@ -9,8 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p>
- * A classe 'IxcRecordFactory' concentra a lógica de instanciação dinâmica dos tipos genéricos que herdam de
- * {@link IxcRecord}.
+ * A classe 'IxcRecordFactory' concentra a lógica de instanciação dinâmica dos tipos derivados de {@link IxcRecord}.
  * </p>
  *
  * @author Felipe S. Carmo
@@ -31,7 +30,8 @@ public class IxcRecordFactory<T extends IxcRecord> {
     }
 
     /**
-     * @param data Um {@link JsonElement} com todas as propriedades da classe que se deseja mapear.
+     * @param data Um {@link JsonElement} com as propriedades que se deseja mapear do parâmetro
+     *             <b>(JsonElement data).</b>
      * @return Um < T >, onde < T > é o tipo da classe que será mapeada.
      */
     public T newRecord(JsonElement data) {

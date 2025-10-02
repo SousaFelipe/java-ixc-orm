@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * <p>
- * A classe 'IxcResponseBody' concentra a lógica de mapeamento dos dados recebidos no corpo da resposta HTTP do
+ * A classe 'IxcResponseBody' concentra a lógica de mapeamento dos dados recebidos no corpo da resposta HTTP da API do
  * IXC Provedor.
  * </p>
  *
@@ -40,23 +40,22 @@ public class IxcResponseBody {
     }
 
     /**
-     * @return Pode retornar "sucesso" ou "erro", dependendo do tipo de resposta da API do IXC Provedor.
-     * Na maioria das respostas esse campo não é informado.
+     * @return Pode retornar "sucesso" ou "erro", dependendo do status de resposta da API do IXC Provedor.
      */
     public String getType() {
         return type;
     }
 
     /**
-     * @return Pode retornar uma mensagem contendo informações sobre sucesso ou falha na requisição deita à API do
-     * IXP Provedor. Essse campo não é informado, quando a resposta vem de uma requisição de listagem de registros.
+     * @return Pode retornar uma mensagem contendo informações sobre sucesso ou falha na requisição. Esse campo é
+     *         nulo quando a resposta vem de uma requisição de listagem de registros.
      */
     public String getMessage() {
         return message;
     }
 
     /**
-     * @return O número da página atual de registros retornados pelo IXC Provedor.
+     * @return O número da página atual, dos registros retornados pelo IXC Provedor.
      */
     public int getPage() {
         return page;
@@ -78,8 +77,8 @@ public class IxcResponseBody {
      *
      * <p>
      * O ideal é invocar <b>IxcResponseBody.getRegistros(Class<T> mapper)</b> apenas uma vez e armezenar o resultado em
-     * uma variável do tipo <b>List< T ></b>, pois dependendo da quantidade de registros retornados por página, essa
-     * função pode consumir muitos recursos.
+     * uma variável do tipo <b>List< T ></b>, pois dependendo da quantidade de registros retornados por página,
+     * a execução dessa função pode consumir muitos recursos.
      * </p>
      *
      * @param mapper A classe de um tipo genérico que herde de {@link IxcRecord}.

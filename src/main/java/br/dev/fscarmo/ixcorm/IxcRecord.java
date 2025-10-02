@@ -8,17 +8,13 @@ import com.google.gson.JsonObject;
 
 /**
  * <p>
- * A classe 'IxcRecord' serve como classe padrão para o mapeamento de objetos retornados pela API do IXC Provedor.
- * Ela não realiza o mapeamento de forma automática, isso deve ser implementado por uma classe filha, dentro do método
- * map().
- * </p>
- *
- * <p>
- * Por padrão, a classe 'IxcRecord' já mapeia a propriedade "id" do registro.
+ * A classe 'IxcRecord' serve como padrão para o mapeamento de objetos retornados pela API do IXC Provedor,
+ * realizando o mapeamento automático de todas as propriedades declaradas em uma subclasse, que correspondam às
+ * proprieades encontradas no parâmetro {@link JsonElement} no construtor.
  * </p>
  *
  * @author Felipe S. Carmo
- * @version 1.0.0
+ * @version 2.1.0
  * @since 2025-09-28
  */
 public abstract class IxcRecord {
@@ -67,8 +63,8 @@ public abstract class IxcRecord {
 
     /**
      * @param property O nome da propriedade a ser obtida no objeto {@link JsonElement}.
-     * @return Um {@link JsonObject} com a proriedade passada em <b>property</b>. Se <b>property</b> não for
-     * encontrada, será retornado um <b>null.</b>
+     * @return Um {@link JsonObject} com a proriedade inserida pelo parâmetro <b>property</b>. Mas se não for
+     *         encontrada nenhuma propriedade correspondente à <b>property</b>, será retornado um <b>null.</b>
      */
     public JsonElement getJsonElement(String property) {
         return jsonElement.getAsJsonObject().get(property);
