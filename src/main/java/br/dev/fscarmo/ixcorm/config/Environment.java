@@ -3,8 +3,9 @@ package br.dev.fscarmo.ixcorm.config;
 
 /**
  * <p>
- * A classe 'Environment' deverá ser herdada, para que você possa construir sua própria maneira de carregar as
- * variáveis de ambiente na sua aplicação.
+ * A classe 'Environment' possibilita, através de herança, formas distintas de carregar as variáveis de ambiente da
+ * biblioteca. No pacote {@link br.dev.fscarmo.ixcorm.config.envs} existem duas classes wrapper, para carregar as
+ * variáveis através do <b>Docker</b> ou de <b>Application Properties.</b>
  * </p>
  *
  * @author Felipe S. Carmo
