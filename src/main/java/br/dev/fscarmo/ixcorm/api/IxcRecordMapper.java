@@ -46,7 +46,9 @@ public abstract class IxcRecordMapper {
                 field.setAccessible(true);
                 mapRecordFieldsByTypes(target, field);
             }
-            catch (IllegalAccessException _) {}
+            catch (IllegalAccessException e) {
+                System.out.println(e.getCause().getMessage());
+            }
         }
     }
 

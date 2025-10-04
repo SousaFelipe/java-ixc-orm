@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Main {
 
-    static void main() {
+    public static void main(String[] args) {
         IxcContext.INSTANCE.setEnv(new PropertiesEnv());
 
         IxcResponse response = Cliente.newCliente()
@@ -19,19 +19,19 @@ public class Main {
         IxcResponseBody responseBody = response.getBody();
         List<ClienteRecord> clientes = responseBody.getRegistros(ClienteRecord.class);
 
-        IO.println("");
-        IO.println("Total de registros encontrados: "+ responseBody.getTotal());
-        IO.println("Página: "+ responseBody.getPage());
+        System.out.println();
+        System.out.println("Total de registros encontrados: "+ responseBody.getTotal());
+        System.out.println("Página: "+ responseBody.getPage());
 
         clientes.forEach(c -> {
-            IO.println("ID: "+ c.getId());
-            IO.println("CPF: "+ c.getDocumento());
-            IO.println("Nome: "+ c.getRazao());
-            IO.println("Endereço: "+ c.getEndereco());
-            IO.println("Número: "+ c.getNumero());
-            IO.println("Bairro: "+ c.getBairro());
-            IO.println("Cód. Cidade: "+ c.getCidade());
-            IO.println("Cód. UF: "+ c.getUf());
+            System.out.println("ID: "+ c.getId());
+            System.out.println("CPF: "+ c.getDocumento());
+            System.out.println("Nome: "+ c.getRazao());
+            System.out.println("Endereço: "+ c.getEndereco());
+            System.out.println("Número: "+ c.getNumero());
+            System.out.println("Bairro: "+ c.getBairro());
+            System.out.println("Cód. Cidade: "+ c.getCidade());
+            System.out.println("Cód. UF: "+ c.getUf());
         });
     }
 }
