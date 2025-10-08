@@ -2,13 +2,20 @@ package br.dev.fscarmo.ixcorm;
 
 
 import com.google.gson.JsonElement;
+import com.google.gson.annotations.SerializedName;
 
 
 public class ClienteRecord extends IxcRecord {
 
-    private String tipo_pessoa;
-    private String cnpj_cpf;
-    private String tipo_localidade;
+    @SerializedName("tipo_pessoa")
+    private String tipoPessoa;
+
+    @SerializedName("cnpj_cpf")
+    private String cnpjCpf;
+
+    @SerializedName("tipo_localidade")
+    private String tipoLocalidade;
+
     private String ativo;
     private String razao;
     private String endereco;
@@ -26,27 +33,27 @@ public class ClienteRecord extends IxcRecord {
     }
 
     public String getTipoPessoa() {
-        return tipo_pessoa;
+        return tipoPessoa;
     }
 
     public void setTipoPessoa(String tipo_pessoa) {
-        this.tipo_pessoa = tipo_pessoa;
+        this.tipoPessoa = tipo_pessoa;
     }
 
     public String getDocumento() {
-        return cnpj_cpf;
+        return cnpjCpf;
     }
 
     public void setDocumento(String cnpj_cpf) {
-        this.cnpj_cpf = cnpj_cpf;
+        this.cnpjCpf = cnpj_cpf;
     }
 
     public String getTipoLocalidade() {
-        return tipo_localidade;
+        return tipoLocalidade;
     }
 
     public void setTipoLocalidade(String tipo_localidade) {
-        this.tipo_localidade = tipo_localidade;
+        this.tipoLocalidade = tipo_localidade;
     }
 
 

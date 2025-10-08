@@ -3,6 +3,7 @@ package br.dev.fscarmo.ixcorm.api;
 
 import br.dev.fscarmo.ixcorm.IxcRecord;
 import com.google.gson.JsonElement;
+import com.google.gson.annotations.SerializedName;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -55,10 +56,13 @@ public abstract class IxcRecordMapper {
     private static List<Field> getAllClassFields(Class<? extends IxcRecord> targetClass) {
         List<Field> fields = new ArrayList<>();
 
+        Field[] currentFields;
         Class<?> currentClass = targetClass;
+
         while (currentClass != null && currentClass != Object.class) {
-            fields.addAll(Arrays.asList(currentClass.getDeclaredFields()));
+            currentFields = currentClass.getDeclaredFields();
             currentClass = currentClass.getSuperclass();
+            fields.addAll(Arrays.asList(currentFields));
         }
 
         return fields;
@@ -93,44 +97,62 @@ public abstract class IxcRecordMapper {
     }
 
     private static void setRecordFieldValueAsBigDecimal(IxcRecord record, Field field) throws IllegalAccessException {
-        JsonElement element = record.getJsonElement(field.getName());
+        String identifier = getRealFieldIdentifier(field);
+        JsonElement element = record.getJsonElement(identifier);
         if (element != null) {
             field.set(record, element.getAsBigDecimal());
         };
     }
 
     private static void setRecordFieldValueAsBigInt(IxcRecord record, Field field) throws IllegalAccessException {
-        JsonElement element = record.getJsonElement(field.getName());
+        String identifier = getRealFieldIdentifier(field);
+        JsonElement element = record.getJsonElement(identifier);
         if (element != null) {
             field.set(record, element.getAsBigInteger());
         };
     }
 
     private static void setRecordFieldValueAsBoolean(IxcRecord record, Field field) throws IllegalAccessException {
-        JsonElement element = record.getJsonElement(field.getName());
+        String identifier = getRealFieldIdentifier(field);
+        JsonElement element = record.getJsonElement(identifier);
         if (element != null) {
             field.set(record, element.getAsBoolean());
         };
     }
 
     private static void setRecordFieldValueAsLong(IxcRecord record, Field field) throws IllegalAccessException {
-        JsonElement element = record.getJsonElement(field.getName());
+        String identifier = getRealFieldIdentifier(field);
+        JsonElement element = record.getJsonElement(identifier);
         if (element != null) {
             field.set(record, element.getAsLong());
         };
     }
 
     private static void setRecordFieldValueAsString(IxcRecord record, Field field) throws IllegalAccessException {
-        JsonElement element = record.getJsonElement(field.getName());
+        String identifier = getRealFieldIdentifier(field);
+        JsonElement element = record.getJsonElement(identifier);
         if (element != null) {
             field.set(record, element.getAsString());
         };
     }
 
     private static void setRecordFieldValueAsInt(IxcRecord record, Field field) throws IllegalAccessException {
-        JsonElement element = record.getJsonElement(field.getName());
+        String identifier = getRealFieldIdentifier(field);
+        JsonElement element = record.getJsonElement(identifier);
         if (element != null) {
             field.set(record, element.getAsInt());
         };
+    }
+
+    private static String getRealFieldIdentifier(Field field) {
+        if (field.isAnnotationPresent(SerializedName.class)) {
+            return fieldNameByGsonSerializedName(field);
+        }
+        return field.getName();
+    }
+
+    private static String fieldNameByGsonSerializedName(Field field) {
+        SerializedName serializedName = field.getAnnotation(SerializedName.class);
+        return serializedName.value();
     }
 }

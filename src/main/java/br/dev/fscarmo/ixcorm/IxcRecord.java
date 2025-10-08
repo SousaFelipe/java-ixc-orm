@@ -41,8 +41,8 @@ public abstract class IxcRecord {
 
     /**
      * <p>
-     * Melhor opção para utilizar, quando se pretende enviar o registro pelo corpo de uma requisição, a fim de
-     * inseri-lo ou atualizá-lo.
+     * Melhor opção para utilizar quando se pretende enviar o registro pelo corpo de uma requisição, a fim de
+     * inseri-lo ou atualizá-lo, no banco de dados do IXC Provedor.
      * </p>
      *
      * @return Uma {@link String} no formato JSON, sem a propriedade "id" do registro.
