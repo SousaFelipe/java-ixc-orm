@@ -47,15 +47,14 @@ São elas as classes: <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/
 <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcOrm.java">IxcOrm</a>
 e <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcRecord.java">IxcRecord</a>.
 
-### 1° Passo
-###### Definindo método de carregamento das variáveis de ambiente
+### 1° Definindo método de carregamento das variáveis de ambiente
 
 A biblioteca já possui duas classes 
 (<a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/config/envs/DockerEnv.java">DockerEnv</a>
 e <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/config/envs/PropertiesEnv.java">PropertiesEnv</a>)
 que irão facilitar o trabalho, caso você escolha declarar as variáveis de ambiente no arquivo `application.properties`, 
-ou no ambiente Docker, através do arquivo `docker-compose.yml`.\
-O exemplo a seguir, mostra como informar ao contexto da biblioteca que as variáveis foram configuradas no aquivo `application.properties`:
+ou no ambiente Docker, através do arquivo `docker-compose.yml`. O exemplo a seguir, mostra como informar ao contexto 
+da biblioteca que as variáveis foram configuradas no aquivo `application.properties`:
 
 ````java
 import br.dev.fscarmo.ixcorm.IxcContext;
@@ -68,5 +67,5 @@ public class Main {
     }
 }
 ````
-> A declaração das variáveis no arquivo `application.properties` deverá seguir o exemplo [1 das Variáveis de ambiente](#1---propriedades),
-> 
+> A declaração das variáveis no arquivo `application.properties` deverá seguir o exemplo [1](#1---propriedades),
+> assim como em ambiente Docker, você deverá seguir o exemplo [2](#2---dokcer), Na sessão de [Configuração das variáveis de ambiente](#configuração-das-variáveis-de-ambiente).
