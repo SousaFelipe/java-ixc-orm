@@ -16,8 +16,8 @@ import br.dev.fscarmo.ixcorm.exception.UnreadableDockerEnvException;
  *
  * {@snippet lang=yaml:
  * environment:
- *       - IXC_ACCESS_TOKEN=conteúdo-do-token-gerando-dentro-do-ixc
- *       - IXC_SERVER_DOMAIN=www.domínio-do-seu-servidor-ixc.com.br
+ *     - IXC_ACCESS_TOKEN=conteúdo-do-token-gerando-dentro-do-ixc
+ *     - IXC_SERVER_DOMAIN=www.domínio-do-seu-servidor-ixc.com.br
  * }
  *
  * @author Felipe S. Carmo
