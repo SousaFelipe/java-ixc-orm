@@ -47,7 +47,7 @@ São elas as classes: <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/
 <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcOrm.java">IxcOrm</a>
 e <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcRecord.java">IxcRecord</a>.
 
-### 1° Definindo método de carregamento das variáveis de ambiente
+### Definindo método de carregamento das variáveis de ambiente
 
 A biblioteca já possui duas classes 
 (<a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/config/envs/DockerEnv.java">DockerEnv</a>
@@ -67,5 +67,7 @@ public class Main {
     }
 }
 ````
-> A declaração das variáveis no arquivo `application.properties` deverá seguir o exemplo [1](#1---propriedades),
-> assim como em ambiente Docker, você deverá seguir o exemplo [2](#2---dokcer), Na sessão de [Configuração das variáveis de ambiente](#configuração-das-variáveis-de-ambiente).
+> A declaração das variáveis no arquivo `application.properties` deverá seguir o [exemplo 1](#1---propriedades),
+> assim como em ambiente Docker, você deverá seguir o [exemplo 2](#2---dokcer), na sessão de [Configuração das variáveis de ambiente](#configuração-das-variáveis-de-ambiente).
+
+### Declarando as classes que irão solicitar registros do IXC Provedor
