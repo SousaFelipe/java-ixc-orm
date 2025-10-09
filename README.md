@@ -148,9 +148,9 @@ clientes.forEach(c -> {
 ````
 
 # Disclaimer
-Cem por cento do código contido nesse repositório foi implementado por apenas uma pessoa (<a href="https://www.linkedin.com/in/fscarmo/" target="_blank">eu 😀</a>), 
+O código nesse repositório foi implementado por apenas uma pessoa (<a href="https://www.linkedin.com/in/fscarmo/" target="_blank">eu 😀</a>), 
 nos seus raros tempos vagos!\
-Estou chamando atenção para este fato, para que você, antes de utilizar essa biblioteca em algum projeto comercial, esteja ciente dos possíveis bugs 
-que podem ter sidos deixados para trás por um programador que disfruta de pouquíssimas horas de sono. 😅
+Estou chamando atenção para este fato, para que você, antes de utilizar essa biblioteca em algum projeto comercial, 
+esteja ciente dos possíveis bugs que podem ter sidos deixados para trás.
 
 Att. <b>Felipe S. Carmo</b>.
