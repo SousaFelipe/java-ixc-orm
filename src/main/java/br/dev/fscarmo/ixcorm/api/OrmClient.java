@@ -63,7 +63,7 @@ public abstract class OrmClient {
     public IxcResponse GET() throws NetworkConnectionException {
         setupUri();
         enableIxcListingHeader();
-        setupPublisherWithBody(query);
+        setupBodyPublisher(query);
         HttpResponse<String> response = sendCreatedRequest(Method.POST);
         return new IxcResponse(response);
     }
@@ -82,7 +82,7 @@ public abstract class OrmClient {
     public IxcResponse POST(IxcRecord record) throws NetworkConnectionException {
         setupUri(record.getId());
         disableIxcListingHeader();
-        setupPublisherWithBody(record.toJsonString());
+        setupBodyPublisher(record.toJsonString());
         HttpResponse<String> response = sendCreatedRequest(Method.POST);
         return new IxcResponse(response);
     }
@@ -101,7 +101,7 @@ public abstract class OrmClient {
     public IxcResponse PUT(IxcRecord record) throws NetworkConnectionException {
         setupUri(record.getId());
         disableIxcListingHeader();
-        setupPublisherWithBody(record.toJsonString());
+        setupBodyPublisher(record.toJsonString());
         HttpResponse<String> response = sendCreatedRequest(Method.PUT);
         return new IxcResponse(response);
     }
@@ -118,7 +118,7 @@ public abstract class OrmClient {
     public IxcResponse DELETE(Integer id) throws NetworkConnectionException {
         setupUri(id);
         disableIxcListingHeader();
-        setupPublisherWithoutBody();
+        setupBodyPublisher(null);
         HttpResponse<String> response = sendCreatedRequest(Method.DELETE);
         return new IxcResponse(response);
     }
@@ -180,12 +180,11 @@ public abstract class OrmClient {
                 .findFirst().ifPresent(h -> h.setValue(""));
     }
 
-    private void setupPublisherWithBody(String body) {
-        publisher = HttpRequest.BodyPublishers.ofString(body);
-    }
-
-    private void setupPublisherWithoutBody() {
-        publisher = HttpRequest.BodyPublishers.noBody();
+    private void setupBodyPublisher(String body) {
+        boolean isValidBody = (body != null && !body.isBlank());
+        publisher = (isValidBody)
+                ? HttpRequest.BodyPublishers.ofString(body)
+                : HttpRequest.BodyPublishers.noBody();
     }
 
     private String getEncodedTokenFromContext() {

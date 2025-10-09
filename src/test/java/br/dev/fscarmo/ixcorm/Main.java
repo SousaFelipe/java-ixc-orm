@@ -12,7 +12,7 @@ public class Main {
         IxcContext.INSTANCE.setEnv(new PropertiesEnv());
 
         IxcResponse response = Cliente.newCliente()
-                .where("razao").like("FELIPE DE SOUSA")
+                .where("razao").like("FELIPE")
                 .where("data_nascimento").greaterThanEquals("1991-01-01")
                 .GET();
 

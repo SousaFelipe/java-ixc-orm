@@ -4,9 +4,15 @@ Este ORM visa facilitar o consumo de dados da API oficial do [IXC Provedor](http
 Esta biblioteca não faz parte das bibliotecas oficiais da [IXCsoft](https://ixcsoft.com/) e foi desenvolvida de forma independente e sem fins lucrativos.
 
 
-## Adicionando ao projeto
+## Objetivo
+Essa biblioteca foi criada para facilitar a manipulação dos registros do sistema <a href="https://ixcsoft.com/ixc-provedor/">IXC Provedor</a>, através de 
+sua <a href="https://wikiapiprovedor.ixcsoft.com.br/">API Oficial</a>. A ideia é de que você não precise mais se 
+preocupar com a construção bruta das queries de busca, nem com a implementação dos algorítimos de validação das 
+requisições da API do IXC. Está tudo aqui, a poucas linhas de código de "distância"! 😀
 
-> **ATENÇÃO:** Esta biblioteca ainda não está disponível no <a href="mvnrepository.com" target="_blank">Maven Repository</a>!
+> [!IMPORTANT]\
+> Esta biblioteca ainda não está disponível nos repositórios oficiais. Por este motivo, o exemplo abaixo deve ser
+> desconsiderado. Por enquanto! 😉
 
 ````xml
 <dependency>
@@ -19,21 +25,23 @@ Esta biblioteca não faz parte das bibliotecas oficiais da [IXCsoft](https://ixc
 
 ## Configuração das variáveis de ambiente
 
-> 1 - Você poderá optar por carregar as variáveis de um arquivo `application.properties`\
-> 2 - Ou do ambiente Docker, declarando cada uma delas no seu `docker-compose.yml`
+> * Você poderá optar por carregar as variáveis de um arquivo `application.properties`;
+> * Ou do ambiente Docker, declarando cada uma delas no seu `docker-compose.yml`.
 
 
 ### 1 - Propriedades
 
 ````properties
+# application.properties
 ixc.access.token=conteúdo-do-token-gerando-dentro-do-ixc
 ixc.server.domain=www.domínio-do-seu-servidor-ixc.com.br
 ````
 
 
-### 2 - Dokcer
+### 2 - Docker
 
 ````yaml
+# docker-compose.yml
 environment:
   - IXC_ACCESS_TOKEN=conteúdo-do-token-gerando-dentro-do-ixc
   - IXC_SERVER_DOMAIN=www.domínio-do-seu-servidor-ixc.com.br
@@ -42,12 +50,13 @@ environment:
 
 ## Como utilizar
 
-Da forma mais simples, será necessário manipular apenas três classes que estão no pacote `br.dev.fscarmo.iscorm.*`.
+Da forma mais simples, será necessário manipular diretamente apenas três classes que estão no pacote `br.dev.fscarmo.iscorm.*`.
 São elas as classes: <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcContext.java">IxcContext</a>,
 <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcOrm.java">IxcOrm</a>
 e <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcRecord.java">IxcRecord</a>.
 
-### Definindo método de carregamento das variáveis de ambiente
+
+### 1 - Definição do método de carregamento das variáveis de ambiente
 
 A biblioteca já possui duas classes 
 (<a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/config/envs/DockerEnv.java">DockerEnv</a>
@@ -63,11 +72,89 @@ import br.dev.fscarmo.ixcorm.config.envs.PropertiesEnv;
 public class Main {
 
     public static void main(String[] args) {
-        IxcContext.INSTANCE.setEnv(new PropertiesEnv());
+        PropertiesEnv environment = new PropertiesEnv();
+        IxcContext.INSTANCE.setEnv(environment);
     }
 }
 ````
 > A declaração das variáveis no arquivo `application.properties` deverá seguir o [exemplo 1](#1---propriedades),
-> assim como em ambiente Docker, você deverá seguir o [exemplo 2](#2---dokcer), na sessão de [Configuração das variáveis de ambiente](#configuração-das-variáveis-de-ambiente).
+> assim como em ambiente Docker, você deverá seguir o [exemplo 2](#2---docker), na sessão de [Configuração das variáveis de ambiente](#configuração-das-variáveis-de-ambiente).
 
-### Declarando as classes que irão solicitar registros do IXC Provedor
+
+### 2 - Declaração das classes manipuladoras
+
+Para enviar requisições HTTP para a API do IXC Provedor, será necessário implemenrtar classes que representarão as 
+tabelas que você deseja manipular. Essas classes deverão herdar da "superclasse" <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcOrm.java">IxcOrm</a>, como no 
+exemplo a seguir, que simula a intenção de manipular os registros dos clientes:
+
+````java
+package br.dev.fscarmo.ixcorm;
+
+public class Cliente extends IxcOrm {
+
+    public Cliente() {
+        super("cliente");
+    }
+
+    public static Cliente newCliente() {
+        return new Cliente();
+    }
+}
+````
+
+
+### 3 - Declaração das classes "Record"
+
+As classes `Record`, para essa biblioteca, são como DTOs que irão mapear as propriedades de cada registro retornado 
+pela API do IXC Provedor. Para criar um `Record` basta declarar uma "subclasse" que herde de <a href="https://github.com/SousaFelipe/java-ixc-orm/blob/master/src/main/java/br/dev/fscarmo/ixcorm/IxcRecord.java">IxcRecord<a/> e 
+declarar as propriedades que você deseja manipular, como no exemplo a seguir:
+
+````java
+import br.dev.fscarmo.ixcorm.IxcRecord;
+import com.google.gson.annotations.SerializedName;
+
+public class ClienteRecord extends IxcRecord {
+
+    @SerializedName("cnpj_cpf")
+    private String cnpjCpf;
+    private String razao;
+    private String endereco;
+    
+    /* getter's e setter's */
+}
+````
+
+> [!NOTE]\
+> Você pode observar que a propriedade `cnpjCpf` está anotada com @SerializedName, da biblioteca <a href="https://github.com/google/gson" target="_blank">Gson</a>.
+> Isso é necessário caso você queira "extrair" corretamente a propriedade que deseja, da resposta do IXC Provedor, sem "ferir" o padrão de conversão de nomes de variáveis do Java.
+
+### 4 - Enviando uma requisição de listagem de clientes
+
+Utilizando as classes de exemplo, criadas no [estágio 2](#2---declaração-das-classes-manipuladoras) e no [estágio 3](#3---declaração-das-classes-record), 
+para simular uma requisição de listagem dos registros de clientes cadastrados a partir de Janeiro de 2025.
+
+````java
+import br.dev.fscarmo.ixcorm.IxcResponse;
+
+IxcResponse response = Cliente.newCliente()
+        .where("data_cadastro")
+        .greaterThanEquals("2025-01-01")
+        .GET();
+
+List<ClienteRecord> clientes = response.getBody().getRegistros(ClienteRecord.class);
+
+clientes.forEach(c -> {
+    System.out.println();
+    System.out.println("CNPJ/CPF: " + c.getCnpjCpf());
+    System.out.println("Razão social: " + c.getRazao());
+    System.out.println("Endereço: " + c.getEndereco());
+});
+````
+
+# Disclaimer
+Cem por cento do código contido nesse repositório foi implementado por apenas uma pessoa (<a href="https://www.linkedin.com/in/fscarmo/" target="_blank">eu 😀</a>), 
+nos seus raros tempos vagos! Estou chamando atenção para este fato, para que você, antes de utilizar essa biblioteca em algum 
+projeto comercial, esteja ciente dos possíveis bugs e vulnerabilidades deixadas para trás por um programador que 
+disfruta de pouquíssimas horas de sono. 😅
+
+Att. <b>Felipe S. Carmo</b>.
