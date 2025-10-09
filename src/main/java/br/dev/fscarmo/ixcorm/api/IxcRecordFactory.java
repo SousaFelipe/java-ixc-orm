@@ -15,6 +15,8 @@ import java.lang.reflect.InvocationTargetException;
  * @author Felipe S. Carmo
  * @version 1.0.0
  * @since 2025-09-28
+ *
+ * @param <T> Qualquer subclasse de {@link IxcRecord}.
  */
 @SuppressWarnings("ClassCanBeRecord")
 public class IxcRecordFactory<T extends IxcRecord> {
@@ -30,6 +32,10 @@ public class IxcRecordFactory<T extends IxcRecord> {
     }
 
     /**
+     * <p>
+     * Retorna uma nova instância de <b>< T ></b>
+     * </p>
+     *
      * @param data Um {@link JsonElement} com as propriedades que se deseja mapear do parâmetro
      *             <b>(JsonElement data).</b>
      * @return Um < T >, onde < T > é o tipo da classe que será mapeada.

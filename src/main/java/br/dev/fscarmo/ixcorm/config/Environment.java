@@ -56,14 +56,22 @@ public abstract class Environment {
     }
 
     /**
-     * @return O <b>Token</b> previamente definido por <b>setToken(String token).</b>
+     * <p>
+     * Recupera o valor do token previamente definido por <b>setToken(String token).</b>
+     * </p>
+     *
+     * @return Uma {@link String} com o valor do <b>Token.</b>
      */
     public String getToken() {
         return token;
     }
 
     /**
-     * @return O <b>Domínio</b> previamente definido por <b>setDomain(String domain).</b>
+     * <p>
+     * Recupera o valor do dompinio previamente definido por <b>setDomain(String domain).</b>
+     * </p>
+     *
+     * @return Uma {@link String} com o valor do <b>Domínio.</b>
      */
     public String getDomain() {
         return domain;
