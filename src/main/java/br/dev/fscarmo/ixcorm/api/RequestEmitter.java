@@ -22,15 +22,15 @@ import java.util.List;
 
 /**
  * <p>
- * A classe 'OrmClient' manipula a query de busca, constrói o manipulador de requisições HTTP e fornece acesso aos
+ * A classe 'RequestEmitter' manipula a query de busca, constrói o manipulador de requisições HTTP e fornece acesso aos
  * métodos de requisição de forma padronizada.
  * </p>
  *
  * @author Felipe S. Carmo
- * @version 1.2.3
+ * @version 2.0.0
  * @since 2025-09-27
  */
-public abstract class OrmClient {
+public abstract class RequestEmitter {
 
     private static final HttpResponse.BodyHandler<String> BODY_HANDLER =
             HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8);
@@ -42,9 +42,9 @@ public abstract class OrmClient {
     private URI uri;
 
     /**
-     * @param table Aqui, representa o endpoint do IXC Provedor para o qual a requisição será enviada.
+     * @param table Representa o endpoint do IXC Provedor para o qual a requisição será enviada.
      */
-    protected OrmClient(String table) {
+    protected RequestEmitter(String table) {
         this.table = table;
         setupDefaultHeaders();
     }
@@ -64,7 +64,7 @@ public abstract class OrmClient {
         setupUri();
         enableIxcListingHeader();
         setupBodyPublisher(query);
-        HttpResponse<String> response = sendCreatedRequest(Method.POST);
+        HttpResponse<String> response = emitRequest(Method.POST);
         return new IxcResponse(response);
     }
 
@@ -83,7 +83,7 @@ public abstract class OrmClient {
         setupUri(record.getId());
         disableIxcListingHeader();
         setupBodyPublisher(record.toJsonString());
-        HttpResponse<String> response = sendCreatedRequest(Method.POST);
+        HttpResponse<String> response = emitRequest(Method.POST);
         return new IxcResponse(response);
     }
 
@@ -102,7 +102,7 @@ public abstract class OrmClient {
         setupUri(record.getId());
         disableIxcListingHeader();
         setupBodyPublisher(record.toJsonString());
-        HttpResponse<String> response = sendCreatedRequest(Method.PUT);
+        HttpResponse<String> response = emitRequest(Method.PUT);
         return new IxcResponse(response);
     }
 
@@ -119,15 +119,8 @@ public abstract class OrmClient {
         setupUri(id);
         disableIxcListingHeader();
         setupBodyPublisher(null);
-        HttpResponse<String> response = sendCreatedRequest(Method.DELETE);
+        HttpResponse<String> response = emitRequest(Method.DELETE);
         return new IxcResponse(response);
-    }
-
-    /**
-     * @param query Uma {@link String} JSON com o corpo da query no formato exigido pela API do IXC Provedor.
-     */
-    protected void setQuery(String query) {
-        this.query = query;
     }
 
     /**
@@ -137,18 +130,24 @@ public abstract class OrmClient {
         return table;
     }
 
-    private HttpResponse<String> sendCreatedRequest(Method method) throws NetworkConnectionException {
-        try (HttpClient client = HttpClient.newHttpClient()) {
+    /**
+     * @param query Uma {@link String} JSON com o corpo da query no formato exigido pela API do IXC Provedor.
+     */
+    protected void setQuery(String query) {
+        this.query = query;
+    }
 
-            HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
-            builder.method(method.value(), publisher);
-            headers.forEach(h -> builder.setHeader(h.getName(), h.getValue()));
+    private void setupDefaultHeaders() {
+        String encodedToken = getEncodedTokenFromContext();
+        headers.add(Header.of("Authorization", "Basic "+ encodedToken));
+        headers.add(Header.of("Content-Type", "application/json"));
+        headers.add(Header.of("ixcsoft", ""));
+    }
 
-            return client.send(builder.build(), BODY_HANDLER);
-        }
-        catch (IllegalArgumentException | UncheckedIOException | InterruptedException | IOException e) {
-            throw new NetworkConnectionException();
-        }
+    private String getEncodedTokenFromContext() {
+        String tokenFromEnv = IxcContext.INSTANCE.getEnv().getToken();
+        byte[] bytes = tokenFromEnv.getBytes(StandardCharsets.UTF_8);
+        return Base64.getEncoder().encodeToString(bytes);
     }
 
     private void setupUri() {
@@ -159,13 +158,6 @@ public abstract class OrmClient {
     private void setupUri(Integer id) {
         String domain = IxcContext.INSTANCE.getEnv().getDomain();
         uri = URI.create("https://"+ domain +"/webservice/v1/"+ table +"/"+ id);
-    }
-
-    private void setupDefaultHeaders() {
-        String encodedToken = getEncodedTokenFromContext();
-        headers.add(Header.of("Authorization", "Basic "+ encodedToken));
-        headers.add(Header.of("Content-Type", "application/json"));
-        headers.add(Header.of("ixcsoft", ""));
     }
 
     private void enableIxcListingHeader() {
@@ -187,9 +179,17 @@ public abstract class OrmClient {
                 : HttpRequest.BodyPublishers.noBody();
     }
 
-    private String getEncodedTokenFromContext() {
-        String tokenFromEnv = IxcContext.INSTANCE.getEnv().getToken();
-        byte[] bytes = tokenFromEnv.getBytes(StandardCharsets.UTF_8);
-        return Base64.getEncoder().encodeToString(bytes);
+    private HttpResponse<String> emitRequest(Method method) throws NetworkConnectionException {
+        try (HttpClient client = HttpClient.newHttpClient()) {
+
+            HttpRequest.Builder builder = HttpRequest.newBuilder(uri);
+            builder.method(method.value(), publisher);
+            headers.forEach(h -> builder.setHeader(h.getName(), h.getValue()));
+
+            return client.send(builder.build(), BODY_HANDLER);
+        }
+        catch (IllegalArgumentException | UncheckedIOException | InterruptedException | IOException e) {
+            throw new NetworkConnectionException();
+        }
     }
 }
