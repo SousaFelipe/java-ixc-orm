@@ -1,7 +1,7 @@
 package br.dev.fscarmo.ixcorm;
 
 
-import br.dev.fscarmo.ixcorm.api.OrmClient;
+import br.dev.fscarmo.ixcorm.api.RequestEmitter;
 import br.dev.fscarmo.ixcorm.api.Parameter;
 import br.dev.fscarmo.ixcorm.api.records.Ordering;
 import br.dev.fscarmo.ixcorm.api.records.Pagination;
@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * <p>
- * A classe 'IxcOrm' fornece métodos que geram uma query de busca e herda o comportamento da classe {@link OrmClient},
+ * A classe 'IxcOrm' fornece métodos que geram uma query de busca e herda o comportamento da classe {@link RequestEmitter},
  * para disponibilizar, através da mesma instância, os métodos que executam requisições HTTP, para a API do IXC
  * Provedor.
  * </p>
@@ -25,10 +25,10 @@ import java.util.List;
  * </p>
  *
  * @author Felipe S. Carmo
- * @version 2.0.0
+ * @version 2.0.1
  * @since 2025-09-27
  */
-public abstract class IxcOrm extends OrmClient {
+public abstract class IxcOrm extends RequestEmitter {
 
     private final List<Parameter> parameters;
     private Ordering ordering;
