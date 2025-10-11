@@ -7,7 +7,7 @@
     <groupId>br.dev.fscarmo</groupId>
     <artifactId>ixcorm</artifactId>
     <name>java-ixc-orm</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>ORM não oficial para consumo de dados da API do sistema IXC Provedor</description>
     <url>https://github.com/SousaFelipe/java-ixc-orm/</url>
     <packaging>jar</packaging>
