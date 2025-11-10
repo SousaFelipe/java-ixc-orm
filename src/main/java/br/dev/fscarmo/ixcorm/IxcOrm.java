@@ -234,9 +234,9 @@ public abstract class IxcOrm extends RequestEmitter {
      * @return Uma {@link String} no formato JSON.
      */
     protected String getQueryAsJson() {
-        String jsonGueryProps = getQueryPropsAsJson();
+        String jsonQueryProps = getQueryPropsAsJson();
         String jsonGridParams = getGridParamsAsJson();
-        return "{"+ jsonGueryProps +","+ jsonGridParams +"}";
+        return "{"+ jsonQueryProps +","+ jsonGridParams +"}";
     }
 
     private void addParamToGridAndReset() {
