@@ -27,7 +27,7 @@ Não precisa mais se preocupar com a construção das `queries` de busca, com a 
 <dependency>
     <groupId>br.dev.fscarmo</groupId>
     <artifactId>ixcorm</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ````
 
@@ -39,22 +39,30 @@ Ou no ambiente Docker, declarando cada uma delas no seu `docker-compose.yaml`. (
 > Particularmente falando, eu utilizo as duas configurações, sendo `application.properties` para testes e `docker-compose.yaml` para produção. 🙂
 
 
-### 1 - Propriedades
-
-````properties
-# application.properties
-ixc.access.token=conteúdo-do-token-gerando-dentro-do-ixc
-ixc.server.domain=www.domínio-do-seu-servidor-ixc.com.br
-````
-
-
-### 2 - Docker
+### Propriedades
 
 ````env
 # .env
-IXC_ACCESS_TOKEN=conteúdo-do-token-gerando-dentro-do-ixc
-IXC_SERVER_DOMAIN=www.domínio-do-seu-servidor-ixc.com.br
+IXC_ACCESS_TOKEN=conteúdo_do_token_gerado_no_ixc_provedor
+IXC_SERVER_DOMAIN=www.domínio_do_seu_servidor_ixc_provedor.com.br
 ````
+
+````properties
+
+# application.properties
+ixc.access.token=conteúdo_do_token_gerado_no_ixc_provedor
+ixc.server.domain=www.domínio_do_seu_servidor_ixc_provedor.com.br
+````
+
+#### Também funciona se você optar por carregar os valores a partir de um .env
+
+````properties
+# application.properties
+ixc.access.token=${IXC_ACCESS_TOKEN}
+ixc.server.domain=${IXC_SERVER_DOMAIN}
+````
+
+### Docker
 
 ````yaml
 # docker-compose.yaml
@@ -96,8 +104,8 @@ public class Main {
     }
 }
 ````
-> A declaração das variáveis no arquivo `application.properties` deverá seguir o [exemplo 1](#1---propriedades),
-> assim como em ambiente Docker, você deverá seguir o [exemplo 2](#2---docker), na sessão de [Configuração das variáveis de ambiente](#configuração-das-variáveis-de-ambiente).
+> A declaração das variáveis no arquivo `application.properties` deverá seguir o [exemplo 1](#propriedades),
+> assim como em ambiente Docker, você deverá seguir o [exemplo 2](#docker), na sessão de [Configuração das variáveis de ambiente](#configuração-das-variáveis-de-ambiente).
 
 
 ### 2 - Declaração das classes manipuladoras

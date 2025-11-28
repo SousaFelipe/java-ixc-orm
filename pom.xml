@@ -7,7 +7,7 @@
     <groupId>br.dev.fscarmo</groupId>
     <artifactId>ixcorm</artifactId>
     <name>java-ixc-orm</name>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <description>ORM não oficial para consumo de dados da API do sistema IXC Provedor</description>
     <url>https://github.com/SousaFelipe/java-ixc-orm/</url>
     <packaging>jar</packaging>
@@ -34,9 +34,9 @@
     </scm>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -47,7 +47,7 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
+    <!--<distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -55,6 +55,17 @@
         <repository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>-->
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>central</id>
+            <url>s01.oss.sonatype.org</url>
+        </snapshotRepository>
+        <repository>
+            <id>central</id>
+            <url>s01.oss.sonatype.org</url>
         </repository>
     </distributionManagement>
 
@@ -101,6 +112,9 @@
                 </executions>
                 <configuration>
                     <failOnError>false</failOnError>
+                    <encoding>UTF-8</encoding>
+                    <charset>UTF-8</charset>
+                    <doclint>none</doclint>
                 </configuration>
             </plugin>
 
