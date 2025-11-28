@@ -45,7 +45,7 @@ public class IxcRecordFactory<T extends IxcRecord> {
             return mapperClass.getDeclaredConstructor(JsonElement.class).newInstance(data);
         }
         catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            System.out.println(e.getCause().getMessage());
+            System.out.println(e.getMessage());
             return null;
         }
     }

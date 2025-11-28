@@ -2,6 +2,7 @@ package br.dev.fscarmo.ixcorm.config.envs;
 
 
 import br.dev.fscarmo.ixcorm.config.Environment;
+import br.dev.fscarmo.ixcorm.config.EnvironmentInterpolator;
 import br.dev.fscarmo.ixcorm.exception.PropertiesFileNotFoundException;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.util.Properties;
  * }
  *
  * @author Felipe S. Carmo
- * @version 1.0.1
+ * @version 1.1.0
  * @since 2025-09-27
  */
 public class PropertiesEnv extends Environment {
@@ -57,8 +58,12 @@ public class PropertiesEnv extends Environment {
 
     private Properties getPropertiesFromStream(InputStream stream) throws RuntimeException {
         try {
-            Properties properties = new Properties();
+            var properties = new Properties();
             properties.load(stream);
+
+            var interpolator = new EnvironmentInterpolator(properties);
+            interpolator.interpolateTemplateStringProperties();
+
             return properties;
         }
         catch (IllegalArgumentException | NullPointerException | IOException e) {
